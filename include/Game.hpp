@@ -3,6 +3,7 @@
 
 # include <ncurses.h>
 # include <string>
+# include <unistd.h>
 /*
 uint8_t is guaranteed to be 8 bits
 uint_fast8_t is guaranteed to be >= 8 bits, much like an unsigned char
