@@ -13,6 +13,7 @@ class IEntity
 		virtual void	update() = 0;
 		virtual void	clear() = 0;
 		virtual void	print() = 0;
+		// virtual void	colision() = 0;
 };
 
 #endif
