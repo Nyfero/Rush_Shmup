@@ -7,7 +7,6 @@
 class Tana: public IEntity
 {
 	private:
-		const char	disp = 'H';
 		vec2i		pos;
 		// const bool	front = 1;
 		vec2f		velocity;
@@ -15,7 +14,7 @@ class Tana: public IEntity
 	
 	public:
 		//Constructors
-		Tana(Game * game);
+		Tana(Game * gameptr);
 		~Tana();
 		
 		//Functions

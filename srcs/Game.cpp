@@ -74,8 +74,8 @@ void	Game::run( void )
 
 	int	input;
 	bool loop = true;
-	int x = 0;
-	int y = 0;
+	int x = game_size.width()/4;
+	int y = game_size.height()/2;
 	char ch = '^';
 
 	wattron(main_win, A_BOLD);
@@ -107,25 +107,25 @@ void	Game::run( void )
 				break;
 			case KEY_LEFT:
 			case 'a':
-				// if (ch == '<')
+				if (x-1 > 0)
 					x--;
 				ch = '<';
 				break;
 			case KEY_RIGHT:
 			case 'd':
-				// if (ch == '>')
+				if (x+1 < game_size.width())
 					x++;
 				ch = '>';
 				break;
 			case KEY_UP:
 			case 'w':
-				// if (ch == '^')
+				if (y > 0)
 					y--;
 				ch = '^';
 				break;
 			case KEY_DOWN:
 			case 's':
-				// if (ch == 'V')
+				if (y <= game_size.height())
 					y++;
 				ch = 'v';
 				break;
@@ -136,7 +136,7 @@ void	Game::run( void )
 
 		if (tick % 5 == 0)
 			tanas.update();
-		if (tick > 1000 && tick % 30 == 0)
+		if (tick > 1 && tick % 30 == 0)
 			tanas.create();
 
 		if (tick % 5 == 0)

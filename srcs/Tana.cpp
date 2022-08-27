@@ -7,10 +7,9 @@
 
 Tana::Tana(Game * gameptr) {
 	game = gameptr;
-	pos.x = rand() % game->getWidth();
-	pos.y = rand() % game->getHeight();
+	pos.x = game->getWidth();
+	pos.y = rand() % game->getHeight() + 1;
 	velocity = setVelocity();
-	(void)disp;
 }
 
 Tana::~Tana() {}
@@ -38,7 +37,7 @@ void	Tana::update() {
 }
 
 void	Tana::print() {
-	mvwaddch(game->getWin(), pos.y, pos.x, 'H');
+	mvwaddch(game->getWin(), pos.y, pos.x, 'H' | COLOR_PAIR(Game::Color::Red));
 }
 
 void	Tana::clear() {
