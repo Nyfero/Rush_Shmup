@@ -7,7 +7,6 @@
 # include "Star.hpp"
 # include <vector>
 
-
 template <typename T>
 class Space
 {

@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Star.hpp"
 #include "Space.hpp"
+#include "Player.hpp"
 #include "Tana.hpp"
 #include <stdlib.h>
 #include <vector>
@@ -68,18 +69,16 @@ Game::~Game() {
 //	Functions	//
 //				//
 
-
 void	Game::run( void )
 {
 	Space<Star> stars(this);
 	Space<Tana> tanas(this);
 	Space<Bullet> bullets(this);
-
+	
+	Player		player(this);
+	
 	int	input;
 	bool loop = true;
-	int x = game_size.width()/4;
-	int y = game_size.height()/2;
-	char ch = '^';
 
 	wattron(main_win, A_BOLD);
 	box(main_win, 0, 0);
@@ -102,8 +101,7 @@ void	Game::run( void )
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).clear();
 
-		mvwaddch(game_win, y, x, ' ');
-		mvwaddch(game_win, y, x-1, ' ');
+		player.clear();
 
 		switch (input)
 		{
@@ -113,34 +111,31 @@ void	Game::run( void )
 				break;
 			case KEY_LEFT:
 			case 'a':
-				if (x-1 > 0)
-					x--;
-				ch = '<';
+				if (player.getPos().x - 1 > 0)
+					player.move(0);
 				break;
 			case KEY_RIGHT:
 			case 'd':
-				if (x+1 < game_size.width())
-					x++;
-				ch = '>';
+				if (player.getPos().x + 1 < game_size.width())
+					player.move(1);
 				break;
 			case KEY_UP:
 			case 'w':
-				if (y > 0)
-					y--;
-				ch = '^';
+				if (player.getPos().y > 0)
+					player.move(2);
 				break;
 			case KEY_DOWN:
 			case 's':
-				if (y <= game_size.height())
-					y++;
-				ch = 'v';
+				if (player.getPos().y <= game_size.height())
+					player.move(3);
 				break;
 			case ' ':
-				if (nb_bullets > 0)
-				{
-					bullets.create(Source::Player, 1.0f, x, y);
-					nb_bullets--;
-				}
+				// if (nb_bullets > 0)
+				// {
+				// 	bullets.create(Source::Player, 1.0f, x, y);
+				// 	nb_bullets--;
+				// }
+				//shoot
 				break;
 			case 410:
 				werase(main_win);
@@ -171,18 +166,18 @@ void	Game::run( void )
 		if (tick % 10 == 0)
 			stars.create();
 
+
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).print();
+
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).print();
 
-		if ((tick % 15)/3)
-			mvwaddch(game_win, y, x-1, '>' | COLOR_PAIR(tick%2 ? Color::Yellow : Color::Red));
+		player.disp(tick);
 
-		mvwaddch(game_win, y, x, '>' | COLOR_PAIR(Color::Blue));
-
+		
 		wrefresh(main_win);
 		wrefresh(game_win);
 
@@ -204,12 +199,10 @@ int_fast16_t Game::getHeight() const {
 	return (game_size.height());
 }
 
-long Game::getTick() const
-{
-	return tick;
+long Game::getTick() const {
+	return (tick);
 }
 
-WINDOW*			Game::getWin()
-{
-	return game_win;
+WINDOW*			Game::getWin() {
+	return (game_win);
 }
