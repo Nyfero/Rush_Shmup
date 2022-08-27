@@ -132,7 +132,7 @@ void	Game::run( void )
 			case ' ':
 				// if (nb_bullets > 0)
 				// {
-				// 	bullets.create(Source::Player, 1.0f, x, y);
+				// 	bullets.create(Source::SPlayer, 1.0f, x, y);
 				// 	nb_bullets--;
 				// }
 				//shoot

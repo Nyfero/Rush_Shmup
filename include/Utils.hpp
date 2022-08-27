@@ -40,7 +40,7 @@ typedef struct s_rect{
 } rect;
 
 typedef enum {
-	Player, Ennemy
+	SPlayer, SEnnemy
 } Source;
 
 # endif
