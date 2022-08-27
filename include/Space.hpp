@@ -14,7 +14,7 @@ class Space
 
 	public:
 		//Constructors
-		Space(Game * gameptr) : lst() { game = gameptr; };
+		Space(Game * gameptr) : lst(), game(gameptr) { }
 		~Space() {};
 		
 		//Functions

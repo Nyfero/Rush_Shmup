@@ -1,1 +1,3 @@
 ft_shmup
+*.d
+*.o
