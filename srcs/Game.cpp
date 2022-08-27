@@ -1,31 +1,11 @@
 #include "Game.hpp"
+#include "Star.hpp"
+#include "Space.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
 #include <iostream>
 
-class Objects //Fields
-{
-	public:
-		Objects() {};
-		~Objects() {};
-		void	update()
-		{
-			for (size_t i = 0; i < lst.size(); i++) {
-				if (lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
-					lst.erase(lst.begin() + i);
-
-				lst.at(i).update();
-			}
-		};
-		void	create() {
-			Star s(game);
-			lst.push_back(s);
-		};
-		std::vector<Object> getData() const { return lst; };
-	private:
-		std::vector<Object>	lst;
-};
 /*
 	if(lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
 		void	create() {
@@ -34,13 +14,17 @@ class Objects //Fields
 		};
 */
 
+//					//
+//	Constructors	//
+//					//
+
 Game::Game() : _status(false)
 {
 	srand(time(NULL));
-
+	
 	main_win = initscr();
 	if (!main_win)
-		return ;
+	return ;
 	cbreak(); // Wait key not line ?
 	noecho(); // No print key on press
 	keypad(main_win, true); // Can use arrow key
@@ -54,16 +38,26 @@ Game::Game() : _status(false)
 		exit(1);
 	}
 	start_color();
-
+	
 	init_pair(1, COLOR_WHITE, COLOR_BLACK); // Create a color with id 1 with black back and blue front
 	init_pair(2, COLOR_RED, COLOR_BLACK); // Create a color with id 1 with black back and blue front
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK); 
 	// wbkgd(main_win, COLOR_PAIR(1)); // set color with id 1
-
-
+	
+	
 	screen_size = {{0, 0}, {80, 24}};
+	game_size = {{0, 0}, {80, 24}};
 	_status = true;
 }
+
+Game::~Game() {
+	endwin();
+}
+
+//				//
+//	Functions	//
+//				//
+
 
 void	Game::run( void )
 {
@@ -78,7 +72,7 @@ void	Game::run( void )
 	std::string text = "Hello world!";
 	addstr(text.c_str());
 
-	Objects stars;
+	Space<Star> space(*this);
 	int	input;
 	bool loop = true;
 	int x = 0;
@@ -91,8 +85,9 @@ void	Game::run( void )
 		input = wgetch(main_win);
 
 		// Remove object from previous position
-		for(Object s : stars.getData())
+		for (size_t i = 0; space.getData().size(); ++i)
 		{
+			Star s = space.getData()[i];
 			mvaddch(s.getPos().y, s.getPos().x, ' ');
 		}
 
@@ -136,19 +131,17 @@ void	Game::run( void )
 		}
 
 		if (tick % 5 == 0)
-			stars.update();
+			space.update();
 		if (tick % 17 == 0)
-			stars.create();
+			space.create();
 		if ((tick % 10)/3)
 		{
 			mvaddch(y, x-1, '>' | COLOR_PAIR(tick%2+2));
 		}
 
 
-		for(Object s : stars.getData())
-		{
-			mvaddch((s.getPos().y), (s.getPos().x), '.');
-		}
+		for(Star s : space.getData())
+			s.print();
 		// attron(A_BOLD); // Atribute Bold on
 		mvaddch(y, x, '@');
 		// attroff(A_BOLD); // Atribute Bold off
@@ -158,14 +151,9 @@ void	Game::run( void )
 		usleep(10000); // 10ms
 	}
 }
-Game::operator bool() const
-{
-	return _status;
-}
 
-Game::~Game()
-{
-	endwin();
+Game::operator bool() const {
+	return (_status);
 }
 
 int_fast16_t Game::getWidth() const {

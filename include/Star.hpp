@@ -11,10 +11,15 @@ class Star: public IEntity
 		float	velocity;
 
 	public:
-		Star(Game const &game);
+		//Constructors
 		~Star();
+		Star(Game const &game);
+		
+		//Functions
 		void	update();
 		vec2i	getPos() const;
+		void	print() const;
+		void	clear() const;
 };
 
 #endif

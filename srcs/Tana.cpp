@@ -1,24 +1,24 @@
-#include "Ennemie.hpp"
+#include "Tana.hpp"
 #include <time.h>
 
 //					//
 //	Constructors	//
 //					//
 
-Ennemie::Ennemie(char c, int x, int y, Game const &gameref): disp(c), game(gameref) {
-	pos.x = x;
-	pos.y = y;
+Tana::Tana(Game const &gameref): game(gameref) {
+	pos.x = rand() % game.getWidth();;
+	pos.y = rand() % game.getHeight();;
 	velocity = setVelocity();
 	(void)disp;
 }
 
-Ennemie::~Ennemie() {}
+Tana::~Tana() {}
 
 //				//
 //	Functions	//
 //				//
 
-vec2f	Ennemie::setVelocity() {
+vec2f	Tana::setVelocity() {
 	vec2f	tmp;
 	
 	tmp.x = xVelocity();
@@ -26,7 +26,20 @@ vec2f	Ennemie::setVelocity() {
 	return (tmp);
 }
 
-float	Ennemie::xVelocity() {
+void	Tana::update() {
+	pos.x += velocity.x;
+	pos.y += velocity.y;
+}
+
+void	Tana::print() const {
+	mvaddch(pos.y, pos.x, 'H');
+}
+
+void	Tana::clear() const {
+	mvaddch(pos.y, pos.x, ' ');
+}
+
+float	Tana::xVelocity() {
 	srand(time(NULL));
 	int		i = rand() % 100;
 	float	x;
@@ -69,7 +82,7 @@ float	Ennemie::xVelocity() {
 	return (x);
 }
 
-float 	Ennemie::yVelocity() {
+float 	Tana::yVelocity() {
 	srand(time(NULL));
 	int		i = rand() % 100;
 	float	y;
