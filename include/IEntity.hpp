@@ -11,8 +11,8 @@ class IEntity
 		
 		//Functions
 		virtual void	update() = 0;
-		virtual void	clear() const = 0;
-		virtual void	print() const = 0;
+		virtual void	clear() = 0;
+		virtual void	print() = 0;
 };
 
 #endif

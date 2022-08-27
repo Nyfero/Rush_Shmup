@@ -43,6 +43,10 @@ typedef struct s_rect{
 class Game
 {
 	public:
+		typedef enum {
+			White = 1, Red, Yellow, Green, Blue
+		} Color;
+
 		Game();
 		~Game();
 		
@@ -50,14 +54,18 @@ class Game
 		operator bool() const;
 		int_fast16_t	getWidth() const;
 		int_fast16_t	getHeight() const;
+		long			getTick() const;
+		WINDOW*			getWin();
+
 	private:
 		WINDOW*	main_win;
 		WINDOW*	game_win;
 		rect	screen_size;
 		rect	game_size;
+		long	tick;
 		// Objects	stars;
 		// Objects	asteroids;
-
+		static int info_height;
 		bool	_status;
 };
 

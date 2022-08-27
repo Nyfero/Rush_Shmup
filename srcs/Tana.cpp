@@ -9,7 +9,6 @@ Tana::Tana(Game const &gameref): game(gameref) {
 	pos.x = rand() % game.getWidth();;
 	pos.y = rand() % game.getHeight();;
 	velocity = setVelocity();
-	(void)disp;
 }
 
 Tana::~Tana() {}

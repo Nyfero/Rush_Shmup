@@ -7,9 +7,7 @@
 class Tana: public IEntity
 {
 	private:
-		const char	disp = 'H';
 		vec2i		pos;
-		// const bool	front = 1;
 		vec2f		velocity;
 		Game const&	game;
 	
