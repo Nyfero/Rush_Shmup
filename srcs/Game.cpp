@@ -46,7 +46,7 @@ Game::Game() : _status(false)
 	
 	
 	screen_size = {{0, 0}, {80, 24}};
-	game_size = {{0, 0}, {150, 40}};
+	game_size = {{0, 0}, {150, 16}};
 	_status = true;
 }
 

@@ -6,7 +6,6 @@
 
 Star::Star(Game &game) {
 	pos.x = game.getWidth();	// Responsive screen
-	std::cerr << game.getHeight();
 	pos.y = rand() % game.getHeight() + 1;
 	velocity = ((float)(rand() % 2 + 2 ) / 2) * -1; // -1 or -1.5
 }
