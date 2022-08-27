@@ -23,7 +23,7 @@ class Object
 		float velocity;
 };
 
-class Objects
+class Objects //Fields
 {
 	public:
 		Objects() {};
@@ -185,4 +185,12 @@ Game::operator bool() const
 Game::~Game()
 {
 	endwin();
+}
+
+int_fast16_t Game::getWidth() const {
+	return (game_size.width());
+}
+
+int_fast16_t Game::getHeight() const {
+	return (game_size.height());
 }
