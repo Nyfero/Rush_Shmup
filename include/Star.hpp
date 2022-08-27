@@ -17,8 +17,8 @@ class Star: public IEntity
 		Star(Game * gameptr);
 
 		//Functions
-		void	update();
 		vec2i	getPos() const;
+		void	update();
 		void	print();
 		void	clear();
 };

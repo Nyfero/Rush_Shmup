@@ -5,9 +5,9 @@
 //	Constructors	//
 //					//
 
-Tana::Tana(Game const &gameref): game(gameref) {
-	pos.x = rand() % game.getWidth();;
-	pos.y = rand() % game.getHeight();;
+Tana::Tana(Game * gameptr): game(gameptr) {
+	pos.x = rand() % game->getWidth();
+	pos.y = rand() % game->getHeight();
 	velocity = setVelocity();
 }
 
@@ -30,12 +30,12 @@ void	Tana::update() {
 	pos.y += velocity.y;
 }
 
-void	Tana::print() const {
-	mvaddch(pos.y, pos.x, 'T');
+void	Tana::print() {
+	mvwaddch(game->getWin(), pos.y, pos.x, 'H' | COLOR_PAIR(Color::Red));
 }
 
-void	Tana::clear() const {
-	mvaddch(pos.y, pos.x, ' ');
+void	Tana::clear() {
+	mvwaddch(game->getWin(), pos.y, pos.x, ' ');
 }
 
 vec2i	Tana::getPos() const {
@@ -47,7 +47,7 @@ float	Tana::xVelocity() {
 	int		i = rand() % 100;
 	float	x;
 
-	// if (pos.x <= (game.getWidth() / 3))
+	// if (pos.x <= (game->getWidth() / 3))
 	// {
 	// 	if (i < 50)	// 50% de chance en diagonale "droite"
 	// 		x = 1;
@@ -58,7 +58,7 @@ float	Tana::xVelocity() {
 	// 	else // 10% de chance en ligne droite
 	// 		x = 0;
 	// }
-	/*else*/ if (pos.x < ((2 * game.getWidth()) / 3))
+	/*else*/ if (pos.x < ((2 * game->getWidth()) / 3))
 	{
 		if (i < 20)	// 20% de chance en diagonale "droite"
 			x = 1;
@@ -90,7 +90,7 @@ float 	Tana::yVelocity() {
 	int		i = rand() % 100;
 	float	y;
 	
-	if (pos.y <= (game.getHeight() / 3))
+	if (pos.y <= (game->getHeight() / 3))
 	{
 		if (i < 20) // 20% de chance en petite monte
 			y = -0.5;
@@ -101,7 +101,7 @@ float 	Tana::yVelocity() {
 		else // 20% de chance en grosse descente
 			y = 1;
 	}
-	else if (pos.y > (game.getHeight() / 3) && pos.y < ((2 * game.getHeight()) / 3))
+	else if (pos.y > (game->getHeight() / 3) && pos.y < ((2 * game->getHeight()) / 3))
 	{
 		if (i < 20) // 20% de chance en grosse monte
 			y = -1;
