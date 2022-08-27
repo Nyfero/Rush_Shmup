@@ -10,6 +10,7 @@ class Star: public IEntity
 		vec2i	pos;
 		float	velocity;
 		Game	*game;
+		Color	color;
 
 	public:
 		//Constructors

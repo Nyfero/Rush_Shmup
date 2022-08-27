@@ -1,8 +1,6 @@
 #ifndef IENTITY_HPP
 # define IENTITY_HPP
 
-# include "Game.hpp"
-
 class IEntity
 {
 	public:
