@@ -29,14 +29,14 @@ class Objects
 		void	update()
 		{
 			for(size_t i = 0; i < lst.size(); i++) {
-				if(lst.at(i).getPos().y > 100) // 100 max y
+				if(lst.at(i).getPos().y > 24) // 100 max y
 					lst.erase(lst.begin() + i);
 
 				lst.at(i).update();
 			}
 
 			// spawn a new object
-			Object s(rand() % 100, 0); // 100 max x
+			Object s(rand() % 80, 0); // 100 max x
 			lst.push_back(s);  
 		};
 		std::vector<Object> getData() const { return lst; };
@@ -48,13 +48,13 @@ Game::Game() : _status(false)
 {
 	srand(time(NULL));
 
-	win = initscr();
-	if (!win)
+	main_win = initscr();
+	if (!main_win)
 		return ;
 	cbreak(); // Wait key not line ?
 	noecho(); // No print key on press
-	keypad(win, true); // Can use arrow key
-	nodelay(win, true); // Remove the wait key with getch
+	keypad(main_win, true); // Can use arrow key
+	nodelay(main_win, true); // Remove the wait key with getch
 	curs_set(0); // Remove cursor
 	clear();
 	
@@ -66,15 +66,22 @@ Game::Game() : _status(false)
 	start_color();
 
 	init_pair(1, COLOR_BLUE, COLOR_BLACK); // Create a color with id 1 with black back and blue front
-	wbkgd(win, COLOR_PAIR(1)); // set color with id 1
+	wbkgd(main_win, COLOR_PAIR(1)); // set color with id 1
 
+
+	screen_size = {{0, 0}, {80, 24}};
 	_status = true;
 }
 
 void	Game::run( void )
 {
+	uint_least16_t maxx, maxy;
+	getmaxyx(main_win, maxy, maxx);
+	(void)game_win;
+	(void)screen_size;
+	(void)game_size;
 	attron(A_BOLD); // Atribute Bold on
-	box(win, 0, 0); // Create a box
+	box(main_win, 0, 0); // Create a box
 	attroff(A_BOLD); // Atribute Bold off
 
 	move(5, 5);
@@ -85,15 +92,20 @@ void	Game::run( void )
 	Objects stars;
 	int	input;
 	bool loop = true;
+	int x = 0;
+	int y = 0;
+	char ch = '^';
 	while(loop)
 	{
-		input = wgetch(win);
+		input = wgetch(main_win);
 
 		// Remove object from previous position
 		for(Object s : stars.getData())
 		{
 			mvaddch(s.getPos().y, s.getPos().x, ' ');
 		}
+
+		mvaddch(y, x, ' ');
 
 		stars.update();
 		switch (input)
@@ -103,6 +115,22 @@ void	Game::run( void )
 			case 27: // Escape key
 				loop = false;
 				break;
+			case 'a':
+				ch = '<';
+				x--;
+				break;
+			case 'd':
+				ch = '>';
+				x++;
+				break;
+			case 'w':
+				ch = '^';
+				y--;
+				break;
+			case 's':
+				ch = 'V';
+				y++;
+				break;
 		}
 
 		for(Object s : stars.getData())
@@ -110,8 +138,9 @@ void	Game::run( void )
 			// Displays given character at given position
 			mvaddch(s.getPos().y, s.getPos().x, '.');
 		}
+		mvaddch(y, x, ch);
 
-		usleep(10000); // 10ms
+		usleep(50000); // 10ms
 		refresh();
 	}
 }
