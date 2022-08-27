@@ -144,25 +144,23 @@ void	Game::run( void )
 		}
 
 		if (tick % 40 == 0)
-		{
 			player.reload();
-		}
+
 		if (tick % 4 == 0)
 			bullets.update();
 
 		if (tick % 5 == 0)
 			tanas.update();
-		if (tick > 250 && tick % 30 == 0)
+		if (tick > 250 && tick % 50 == 0)
 			tanas.create();
 
-		if (tick % 7 == 0)
-			stars.update();
 		if (tick % 10 == 0)
+			stars.update();
+		if (tick % 20 == 0)
 			stars.create();
 
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).print();
-
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
