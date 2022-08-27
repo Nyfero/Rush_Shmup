@@ -40,6 +40,7 @@ Game::Game() : _status(false)
 	init_pair(Color::Yellow, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(Color::Green, COLOR_GREEN, COLOR_BLACK);
 	init_pair(Color::Blue, COLOR_BLUE, COLOR_BLACK);
+	
 	screen_size = {{0, 0}, {80, 24}};
 	game_size = {{0, 0}, {screen_size.width() - 2, screen_size.height() - info_height - 4}};
   
@@ -53,6 +54,7 @@ Game::Game() : _status(false)
 	nodelay(game_win, true);
 	bkgd(COLOR_PAIR(1));
 	refresh();
+
 
 	_status = true;
 }
@@ -69,8 +71,9 @@ Game::~Game() {
 
 void	Game::run( void )
 {
-	Space<Star>	stars(this);
-	Space<Tana>	tanas(this);
+	Space<Star> stars(this);
+	Space<Tana> tanas(this);
+	Space<Bullet> bullets(this);
 	
 	Player		player(this);
 	
@@ -84,7 +87,8 @@ void	Game::run( void )
 	whline(main_win, '-', screen_size.width()- 2);
 	wrefresh(main_win);
 	wrefresh(game_win);
-
+	
+	int nb_bullets = 20;
 	tick = 0;
 	while(loop)
 	{
@@ -94,6 +98,8 @@ void	Game::run( void )
 			tanas.getData().at(i).clear();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).clear();
+		for (size_t i = 0; i < bullets.getData().size(); ++i)
+			bullets.getData().at(i).clear();
 
 		player.clear();
 
@@ -124,35 +130,61 @@ void	Game::run( void )
 					player.move(3);
 				break;
 			case ' ':
+				// if (nb_bullets > 0)
+				// {
+				// 	bullets.create(Source::SPlayer, 1.0f, x, y);
+				// 	nb_bullets--;
+				// }
 				//shoot
 				break;
+			case 410:
+				werase(main_win);
+				werase(game_win);
+				wattron(main_win, A_BOLD);
+				box(main_win, 0, 0);
+				wattroff(main_win, A_BOLD);
+				wmove(main_win, game_size.bottom() + 3, 1);
+				whline(main_win, '-', screen_size.width()- 2);
+				break;
 		}
+
+		if (tick % 40 == 0)
+		{
+			if (nb_bullets < 10)
+				nb_bullets++;
+		}
+		if (tick % 4 == 0)
+			bullets.update();
 
 		if (tick % 5 == 0)
 			tanas.update();
 		if (tick > 250 && tick % 30 == 0)
 			tanas.create();
 
-		if (tick % 5 == 0)
+		if (tick % 7 == 0)
 			stars.update();
-		if (tick % 17 == 0)
+		if (tick % 10 == 0)
 			stars.create();
 
-		player.disp(tick);
+		for (size_t i = 0; i < bullets.getData().size(); ++i)
+			bullets.getData().at(i).print();
 
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).print();
 
+		player.disp(tick);
+
 		
 		wrefresh(main_win);
 		wrefresh(game_win);
 
 		++tick;
-		usleep(10000); // 10ms
+		usleep(10000); // 1ms
 	}
 }
+
 
 Game::operator bool() const {
 	return (_status);

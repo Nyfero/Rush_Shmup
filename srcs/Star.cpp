@@ -6,8 +6,9 @@
 
 Star::Star(Game * gameptr): game(gameptr) {
 	pos.x = game->getWidth();	// Responsive screen
-	pos.y = rand() % game->getHeight() + 1;
+	pos.y = rand() % (game->getHeight()+2);
 	velocity = ((float)(rand() % 2 + 2 ) / 2) * -1; // -1 or -1.5
+	color = rand() % 2 ? Color::Blue : Color::White;
 }
 
 Star::~Star() {}
@@ -25,7 +26,7 @@ vec2i	Star::getPos() const {
 }
 
 void 	Star::print() {
-	mvwaddch(game->getWin(), pos.y, pos.x, '.');
+	mvwaddch(game->getWin(), pos.y, pos.x, '.' | COLOR_PAIR(color));
 }
 
 void 	Star::clear() {
