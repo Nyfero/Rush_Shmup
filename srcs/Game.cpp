@@ -1,7 +1,8 @@
 #include "Game.hpp"
 #include <stdlib.h>
 #include <vector>
-
+#include <math.h>
+#include <iostream>
 
 
 class Object
@@ -43,6 +44,13 @@ class Objects //Fields
 	private:
 		std::vector<Object>	lst;
 };
+/*
+	if(lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
+		void	create() {
+			Object s(80, rand() % 24, ((float)(rand()%2+2)/2));
+			lst.push_back(s);
+		};
+*/
 
 Game::Game() : _status(false)
 {
@@ -65,7 +73,8 @@ Game::Game() : _status(false)
 	}
 	start_color();
 
-	init_pair(1, COLOR_BLUE, COLOR_BLACK); // Create a color with id 1 with black back and blue front
+	init_pair(1, COLOR_WHITE, COLOR_BLACK); // Create a color with id 1 with black back and blue front
+	init_pair(2, COLOR_RED, COLOR_BLACK); // Create a color with id 1 with black back and blue front
 	wbkgd(main_win, COLOR_PAIR(1)); // set color with id 1
 
 
@@ -95,6 +104,8 @@ void	Game::run( void )
 	int x = 0;
 	int y = 0;
 	char ch = '^';
+	int tick = 0;
+		erase();
 	while(loop)
 	{
 		input = wgetch(main_win);
@@ -105,9 +116,13 @@ void	Game::run( void )
 			mvaddch(s.getPos().y, s.getPos().x, ' ');
 		}
 
-		mvaddch(y, x, ' ');
 
-		stars.update();
+		attron(COLOR_PAIR(2));
+		mvaddch(y, x, ' ');
+		mvaddch(y, x-1, ' ');
+		attroff(COLOR_PAIR(2));
+
+
 		switch (input)
 		{
 			case 'Q':
@@ -116,32 +131,53 @@ void	Game::run( void )
 				loop = false;
 				break;
 			case 'a':
+				// if (ch == '<')
+					x--;
 				ch = '<';
-				x--;
 				break;
 			case 'd':
+				// if (ch == '>')
+					x++;
 				ch = '>';
-				x++;
 				break;
 			case 'w':
-				ch = '^';
-				y--;
+				// if (ch == '^')
+					y--;
+				ch = ACS_UARROW;
 				break;
 			case 's':
-				ch = 'V';
-				y++;
+				// if (ch == 'V')
+					y++;
+				ch = ACS_DARROW;
+				break;
+			case ' ':
+
 				break;
 		}
+
+		if (tick % 5 == 0)
+			stars.update();
+		if (tick % 17 == 0)
+			stars.create();
+		if ((tick % 10)/3)
+		{
+			attron(COLOR_PAIR(2));
+			mvaddch(y, x-1, '>');
+			attroff(COLOR_PAIR(2));
+		}
+
 
 		for(Object s : stars.getData())
 		{
-			// Displays given character at given position
-			mvaddch(s.getPos().y, s.getPos().x, '.');
+			mvaddch((s.getPos().y), (s.getPos().x), '.');
 		}
-		mvaddch(y, x, ch);
+		attron(A_BOLD); // Atribute Bold on
+		mvaddch(y, x, '@');
+		attroff(A_BOLD); // Atribute Bold off
 
-		usleep(50000); // 10ms
 		refresh();
+		++tick;
+		usleep(10000); // 10ms
 	}
 }
 Game::operator bool() const
