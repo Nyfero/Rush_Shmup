@@ -9,17 +9,18 @@ class Star: public IEntity
 	private:
 		vec2i	pos;
 		float	velocity;
+		Game *	game;
 
 	public:
 		//Constructors
 		~Star();
-		Star(Game &game);
-		
+		Star(Game * gameptr);
+
 		//Functions
 		void	update();
 		vec2i	getPos() const;
-		void	print() const;
-		void	clear() const;
+		void	print();
+		void	clear();
 };
 
 #endif

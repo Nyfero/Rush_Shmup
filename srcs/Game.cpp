@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Star.hpp"
 #include "Space.hpp"
+#include "Tana.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -56,6 +57,8 @@ Game::Game() : _status(false)
 }
 
 Game::~Game() {
+	delwin(main_win);
+	delwin(game_win);
 	endwin();
 }
 
@@ -66,7 +69,8 @@ Game::~Game() {
 
 void	Game::run( void )
 {
-	Space<Star> space(*this);
+	Space<Star> stars(this);
+	Space<Tana> tanas(this);
 
 	int	input;
 	bool loop = true;
@@ -87,12 +91,10 @@ void	Game::run( void )
 	{
 		input = tolower(wgetch(main_win));
 
-		// Remove object from previous position
-		for (size_t i = 0; i < space.getData().size(); ++i)
-		{
-			Star s = space.getData().at(i);
-			mvwaddch(game_win, s.getPos().y, s.getPos().x, ' ');
-		}
+		for (size_t i = 0; i < tanas.getData().size(); ++i)
+			tanas.getData().at(i).clear();
+		for (size_t i = 0; i < stars.getData().size(); ++i)
+			stars.getData().at(i).clear();
 
 		mvwaddch(game_win, y, x, ' ');
 		mvwaddch(game_win, y, x-1, ' ');
@@ -133,16 +135,23 @@ void	Game::run( void )
 		}
 
 		if (tick % 5 == 0)
-			space.update();
+			tanas.update();
+		if (tick > 1000 && tick % 30 == 0)
+			tanas.create();
+
+		if (tick % 5 == 0)
+			stars.update();
 		if (tick % 17 == 0)
-			space.create();
+			stars.create();
 		if ((tick % 15)/3)
 			mvwaddch(game_win, y, x-1, '>' | COLOR_PAIR(tick%2 ? Color::Yellow : Color::Red));
 		else
 			mvwaddch(game_win , y, x-1, ' ');
 
-		for(Star s : space.getData())
-			s.print();
+		for (size_t i = 0; i < stars.getData().size(); ++i)
+			stars.getData().at(i).print();
+		for (size_t i = 0; i < tanas.getData().size(); ++i)
+			tanas.getData().at(i).print();
 
 		mvwaddch(game_win, y, x, '>' | COLOR_PAIR(Color::Blue));
 
@@ -170,4 +179,9 @@ int_fast16_t Game::getHeight() const {
 long Game::getTick() const
 {
 	return tick;
+}
+
+WINDOW*			Game::getWin()
+{
+	return game_win;
 }

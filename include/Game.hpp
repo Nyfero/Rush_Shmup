@@ -55,6 +55,8 @@ class Game
 		int_fast16_t	getWidth() const;
 		int_fast16_t	getHeight() const;
 		long			getTick() const;
+		WINDOW*			getWin();
+
 	private:
 		WINDOW*	main_win;
 		WINDOW*	game_win;
