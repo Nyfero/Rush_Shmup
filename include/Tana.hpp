@@ -7,13 +7,13 @@
 class Tana: public IEntity
 {
 	private:
-		vec2i		pos;
-		vec2f		velocity;
-		Game const&	game;
+		vec2i	pos;
+		vec2f	velocity;
+		Game 	*game;
 	
 	public:
 		//Constructors
-		Tana(Game const &game);
+		Tana(Game *gameptr);
 		~Tana();
 		
 		//Functions
@@ -21,8 +21,8 @@ class Tana: public IEntity
 		float	xVelocity();
 		float	yVelocity();
 		void	update();
-		void	print() const;
-		void	clear() const;
+		void	print();
+		void	clear();
 		vec2i	getPos() const;
 };
 

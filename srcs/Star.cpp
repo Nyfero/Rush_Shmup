@@ -4,7 +4,7 @@
 //	Constructors	//
 //					//
 
-Star::Star(Game * gameptr) {
+Star::Star(Game *gameptr) {
 	game = gameptr;
 	pos.x = game->getWidth();	// Responsive screen
 	pos.y = rand() % game->getHeight() + 1;

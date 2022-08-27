@@ -3,7 +3,6 @@
 
 # include "Game.hpp"
 # include "Star.hpp"
-# include "Tana.hpp"
 # include <vector>
 
 
@@ -12,20 +11,19 @@ class Space
 {
 	private:
 		std::vector<T>	lst;
-		Game *			game;
+		Game			*game;
 
 	public:
 		//Constructors
-		Space(Game * gameptr) : lst() { game = gameptr;};
+		Space(Game * gameptr) : lst() { game = gameptr; };
 		~Space() {};
 		
 		//Functions
 		void	update() {
 			for (size_t i = 0; i < lst.size(); i++) {
-				if (lst.at(i).getPos().x > game->getWidth() || lst.at(i).getPos().y > game->getHeight() || lst.at(i).getPos().x <= 0 || lst.at(i).getPos().y <= 0)
+				if (lst.at(i).getPos().x > game->getWidth() || lst.at(i).getPos().x < 0 )
 					lst.erase(lst.begin() + i);
-				else
-					lst.at(i).update();
+				lst.at(i).update();
 			}
 		};
 

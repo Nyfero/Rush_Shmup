@@ -72,13 +72,6 @@ void	Game::run( void )
 	Space<Star> stars(this);
 	Space<Tana> tanas(this);
 
-	move(5, 5);
-
-	std::string text = "Hello world!";
-	addstr(text.c_str());
-
-	Space<Star>	space(this);
-	Space<Tana>	tana(this);
 	int	input;
 	bool loop = true;
 	int x = game_size.width()/4;
