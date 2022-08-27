@@ -1,60 +1,30 @@
 #include "Game.hpp"
+#include "Star.hpp"
+#include "Space.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
 #include <iostream>
 
-
-class Object
-{
-	public:
-		Object() {};
-		Object(int x, int y, float vel) { pos.x = x; pos.y = y; velocity = vel;};
-		~Object() {};
-		void	update() {
-			pos.x += velocity;
-		};
-		vec2i	getPos() const
-		{
-			return pos;
-		};
-	private:
-		vec2i	pos;
-		float velocity;
-};
-
-class Objects //Fields
-{
-	public:
-		Objects() {};
-		~Objects() {};
-		void	update()
-		{
-			for (size_t i = 0; i < lst.size(); i++) {
-				if (lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
-					lst.erase(lst.begin() + i);
-
-				lst.at(i).update();
-			}
-		};
+/*
+	if(lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
 		void	create() {
-			Object s(80, rand() % 24, ((float)(rand()%2+2)/2) * -1);
+			Object s(80, rand() % 24, ((float)(rand()%2+2)/2));
 			lst.push_back(s);
 		};
-		std::vector<Object> getData() const { return lst; };
-	private:
-		std::vector<Object>	lst;
-};
+*/
 
-int Game::info_height = 4;
+//					//
+//	Constructors	//
+//					//
 
 Game::Game() : _status(false)
 {
 	srand(time(NULL));
-
+	
 	main_win = initscr();
 	if (!main_win)
-		return ;
+	return ;
 	cbreak(); // Wait key not line ?
 	noecho(); // No print key on press
 	clear();
@@ -91,9 +61,19 @@ Game::Game() : _status(false)
 	_status = true;
 }
 
+Game::~Game() {
+	endwin();
+}
+
+//				//
+//	Functions	//
+//				//
+
+# include <iostream>
+
 void	Game::run( void )
 {
-	Objects stars;
+	Space<Star> space(*this);
 
 	int	input;
 	bool loop = true;
@@ -115,8 +95,11 @@ void	Game::run( void )
 		input = tolower(wgetch(main_win));
 
 		// Remove object from previous position
-		for(Object s : stars.getData())
+		for (size_t i = 0; i < space.getData().size(); ++i)
+		{
+			Star s = space.getData().at(i);
 			mvwaddch(game_win, s.getPos().y, s.getPos().x, ' ');
+		}
 
 		mvwaddch(game_win, y, x, ' ');
 		mvwaddch(game_win, y, x-1, ' ');
@@ -157,16 +140,16 @@ void	Game::run( void )
 		}
 
 		if (tick % 5 == 0)
-			stars.update();
+			space.update();
 		if (tick % 17 == 0)
-			stars.create();
+			space.create();
 		if ((tick % 15)/3)
 			mvwaddch(game_win, y, x-1, '>' | COLOR_PAIR(tick%2 ? Color::Yellow : Color::Red));
 		else
 			mvwaddch(game_win , y, x-1, ' ');
 
-		for(Object s : stars.getData())
-			mvwaddch(game_win, (s.getPos().y), (s.getPos().x), '.');
+		for(Star s : space.getData())
+			s.print();
 
 		mvwaddch(game_win, y, x, '>' | COLOR_PAIR(Color::Blue));
 
@@ -178,14 +161,9 @@ void	Game::run( void )
 		usleep(10000); // 10ms
 	}
 }
-Game::operator bool() const
-{
-	return _status;
-}
 
-Game::~Game()
-{
-	endwin();
+Game::operator bool() const {
+	return (_status);
 }
 
 int_fast16_t Game::getWidth() const {
