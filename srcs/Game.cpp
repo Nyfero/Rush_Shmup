@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Star.hpp"
 #include "Space.hpp"
+#include "Tana.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -58,8 +59,6 @@ Game::~Game() {
 //	Functions	//
 //				//
 
-# include <iostream>
-
 void	Game::run( void )
 {
 	uint_least16_t maxx, maxy;
@@ -73,7 +72,8 @@ void	Game::run( void )
 	std::string text = "Hello world!";
 	addstr(text.c_str());
 
-	Space<Star> space(*this);
+	Space<Star>	space(*this);
+	Space<Tana>	tana(*this);
 	int	input;
 	bool loop = true;
 	int x = 0;
@@ -92,6 +92,11 @@ void	Game::run( void )
 			mvaddch(s.getPos().y, s.getPos().x, ' ');
 		}
 
+		for (size_t i = 0; i < tana.getData().size(); ++i)
+		{
+			Tana t = tana.getData().at(i);
+			mvaddch(t.getPos().y, t.getPos().x, ' ');
+		}
 
 		// attron(COLOR_PAIR(2));
 		mvaddch(y, x, ' ');
@@ -132,9 +137,14 @@ void	Game::run( void )
 		}
 
 		if (tick % 5 == 0)
-			space.update();
+		{
+			space.update();	
+			tana.update();
+		}
 		if (tick % 17 == 0)
 			space.create();
+		if (tick % 50 == 0)
+			tana.create();
 		if ((tick % 10)/3)
 		{
 			mvaddch(y, x-1, '>' | COLOR_PAIR(tick%2+2));
@@ -142,6 +152,8 @@ void	Game::run( void )
 
 		for(Star s : space.getData())
 			s.print();
+		for(Tana t : tana.getData())
+			t.print();
 		// attron(A_BOLD); // Atribute Bold on
 		mvaddch(y, x, '@');
 		// attroff(A_BOLD); // Atribute Bold off

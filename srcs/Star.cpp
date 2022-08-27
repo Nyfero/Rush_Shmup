@@ -1,5 +1,5 @@
 #include "Star.hpp"
-#include <iostream>
+
 //					//
 //	Constructors	//
 //					//

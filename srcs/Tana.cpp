@@ -32,11 +32,15 @@ void	Tana::update() {
 }
 
 void	Tana::print() const {
-	mvaddch(pos.y, pos.x, 'H');
+	mvaddch(pos.y, pos.x, 'T');
 }
 
 void	Tana::clear() const {
 	mvaddch(pos.y, pos.x, ' ');
+}
+
+vec2i	Tana::getPos() const {
+	return (pos);
 }
 
 float	Tana::xVelocity() {

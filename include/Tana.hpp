@@ -25,6 +25,7 @@ class Tana: public IEntity
 		void	update();
 		void	print() const;
 		void	clear() const;
+		vec2i	getPos() const;
 };
 
 #endif

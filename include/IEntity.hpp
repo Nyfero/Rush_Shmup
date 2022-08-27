@@ -1,7 +1,6 @@
 #ifndef IENTITY_HPP
 # define IENTITY_HPP
 
-# define PI 3.1415
 # include "Game.hpp"
 
 class IEntity
