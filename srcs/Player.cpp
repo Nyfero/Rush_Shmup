@@ -38,7 +38,7 @@ void	Player::disp(int tick) { //Affiche la position du joueur
 		mvwaddch(game->getWin(), pos.y, pos.x - 1, '>' | COLOR_PAIR(tick%2 ? Color::Yellow : Color::Red));
 	else
 		mvwaddch(game->getWin(), pos.y, pos.x - 1, ' ');
-	mvwaddch(game->getWin(), pos.y, pos.x, '>' | COLOR_PAIR(Color::Blue));
+	mvwaddch(game->getWin(), pos.y, pos.x, '>' | COLOR_PAIR(Color::Blue) | A_BOLD);
 }
 
 void 	Player::clear() { //Supprime l'ancienne position du joueur

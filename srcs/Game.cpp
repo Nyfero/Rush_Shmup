@@ -88,7 +88,6 @@ void	Game::run( void )
 	wrefresh(main_win);
 	wrefresh(game_win);
 	
-	int nb_bullets = 20;
 	tick = 0;
 	while(loop)
 	{
@@ -130,12 +129,8 @@ void	Game::run( void )
 					player.move(3);
 				break;
 			case ' ':
-				// if (nb_bullets > 0)
-				// {
-				// 	bullets.create(Source::SPlayer, 1.0f, x, y);
-				// 	nb_bullets--;
-				// }
-				//shoot
+				if (player.shoot())
+					bullets.create(Source::SPlayer, 1.0f, player.getPos().x, player.getPos().y);
 				break;
 			case 410:
 				werase(main_win);
@@ -150,8 +145,7 @@ void	Game::run( void )
 
 		if (tick % 40 == 0)
 		{
-			if (nb_bullets < 10)
-				nb_bullets++;
+			player.reload();
 		}
 		if (tick % 4 == 0)
 			bullets.update();
