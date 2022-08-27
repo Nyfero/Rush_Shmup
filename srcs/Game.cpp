@@ -6,17 +6,11 @@
 #include <math.h>
 #include <iostream>
 
-/*
-	if(lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
-		void	create() {
-			Object s(80, rand() % 24, ((float)(rand()%2+2)/2));
-			lst.push_back(s);
-		};
-*/
-
 //					//
 //	Constructors	//
 //					//
+
+int	Game::info_height = 4;
 
 Game::Game() : _status(false)
 {
@@ -69,7 +63,6 @@ Game::~Game() {
 //	Functions	//
 //				//
 
-# include <iostream>
 
 void	Game::run( void )
 {
