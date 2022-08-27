@@ -9,10 +9,10 @@ class Object
 {
 	public:
 		Object() {};
-		Object(int x, int y) { pos.x = x; pos.y = y; };
+		Object(int x, int y, float vel) { pos.x = x; pos.y = y; velocity = vel;};
 		~Object() {};
 		void	update() {
-			++pos.y;
+			pos.x += velocity;
 		};
 		vec2i	getPos() const
 		{
@@ -20,6 +20,7 @@ class Object
 		};
 	private:
 		vec2i	pos;
+		float velocity;
 };
 
 class Objects
@@ -29,16 +30,16 @@ class Objects
 		~Objects() {};
 		void	update()
 		{
-			for(size_t i = 0; i < lst.size(); i++) {
-				if(lst.at(i).getPos().y > 24) // 100 max y
+			for (size_t i = 0; i < lst.size(); i++) {
+				if (lst.at(i).getPos().x > 80 || lst.at(i).getPos().x < 0 ) // 100 max y
 					lst.erase(lst.begin() + i);
 
 				lst.at(i).update();
 			}
-
-			// spawn a new object
-			Object s(rand() % 80, 0); // 100 max x
-			lst.push_back(s);  
+		};
+		void	create() {
+			Object s(80, rand() % 24, ((float)(rand()%2+2)/2) * -1);
+			lst.push_back(s);
 		};
 		std::vector<Object> getData() const { return lst; };
 	private:
@@ -75,7 +76,8 @@ Game::Game() : _status(false)
 
 	init_pair(1, COLOR_WHITE, COLOR_BLACK); // Create a color with id 1 with black back and blue front
 	init_pair(2, COLOR_RED, COLOR_BLACK); // Create a color with id 1 with black back and blue front
-	wbkgd(main_win, COLOR_PAIR(1)); // set color with id 1
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK); 
+	// wbkgd(main_win, COLOR_PAIR(1)); // set color with id 1
 
 
 	screen_size = {{0, 0}, {80, 24}};
@@ -89,9 +91,6 @@ void	Game::run( void )
 	(void)game_win;
 	(void)screen_size;
 	(void)game_size;
-	attron(A_BOLD); // Atribute Bold on
-	box(main_win, 0, 0); // Create a box
-	attroff(A_BOLD); // Atribute Bold off
 
 	move(5, 5);
 
@@ -105,7 +104,7 @@ void	Game::run( void )
 	int y = 0;
 	char ch = '^';
 	int tick = 0;
-		erase();
+		// erase();
 	while(loop)
 	{
 		input = wgetch(main_win);
@@ -117,10 +116,10 @@ void	Game::run( void )
 		}
 
 
-		attron(COLOR_PAIR(2));
+		// attron(COLOR_PAIR(2));
 		mvaddch(y, x, ' ');
 		mvaddch(y, x-1, ' ');
-		attroff(COLOR_PAIR(2));
+		// attroff(COLOR_PAIR(2));
 
 
 		switch (input)
@@ -161,9 +160,7 @@ void	Game::run( void )
 			stars.create();
 		if ((tick % 10)/3)
 		{
-			attron(COLOR_PAIR(2));
-			mvaddch(y, x-1, '>');
-			attroff(COLOR_PAIR(2));
+			mvaddch(y, x-1, '>' | COLOR_PAIR(tick%2+2));
 		}
 
 
@@ -171,9 +168,9 @@ void	Game::run( void )
 		{
 			mvaddch((s.getPos().y), (s.getPos().x), '.');
 		}
-		attron(A_BOLD); // Atribute Bold on
+		// attron(A_BOLD); // Atribute Bold on
 		mvaddch(y, x, '@');
-		attroff(A_BOLD); // Atribute Bold off
+		// attroff(A_BOLD); // Atribute Bold off
 
 		refresh();
 		++tick;
