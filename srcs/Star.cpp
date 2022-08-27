@@ -4,7 +4,7 @@
 //	Constructors	//
 //					//
 
-Star::Star(Game const &game) {
+Star::Star(Game &game) {
 	pos.x = game.getWidth();	// Responsive screen
 	std::cerr << game.getHeight();
 	pos.y = rand() % game.getHeight() + 1;

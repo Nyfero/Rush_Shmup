@@ -46,7 +46,7 @@ Game::Game() : _status(false)
 	
 	
 	screen_size = {{0, 0}, {80, 24}};
-	game_size = {{0, 0}, {80, 24}};
+	game_size = {{0, 0}, {150, 40}};
 	_status = true;
 }
 
@@ -58,6 +58,7 @@ Game::~Game() {
 //	Functions	//
 //				//
 
+# include <iostream>
 
 void	Game::run( void )
 {
@@ -85,9 +86,9 @@ void	Game::run( void )
 		input = wgetch(main_win);
 
 		// Remove object from previous position
-		for (size_t i = 0; space.getData().size(); ++i)
+		for (size_t i = 0; i < space.getData().size(); ++i)
 		{
-			Star s = space.getData()[i];
+			Star s = space.getData().at(i);
 			mvaddch(s.getPos().y, s.getPos().x, ' ');
 		}
 
@@ -139,13 +140,11 @@ void	Game::run( void )
 			mvaddch(y, x-1, '>' | COLOR_PAIR(tick%2+2));
 		}
 
-
 		for(Star s : space.getData())
 			s.print();
 		// attron(A_BOLD); // Atribute Bold on
 		mvaddch(y, x, '@');
 		// attroff(A_BOLD); // Atribute Bold off
-
 		refresh();
 		++tick;
 		usleep(10000); // 10ms

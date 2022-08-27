@@ -13,7 +13,7 @@ class Star: public IEntity
 	public:
 		//Constructors
 		~Star();
-		Star(Game const &game);
+		Star(Game &game);
 		
 		//Functions
 		void	update();
