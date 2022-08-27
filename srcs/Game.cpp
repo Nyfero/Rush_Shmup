@@ -21,7 +21,7 @@ class Object
 		vec2i	pos;
 };
 
-class Objects
+class Objects //Fields
 {
 	public:
 		Objects() {};
