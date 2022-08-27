@@ -137,6 +137,7 @@ void	Game::run( void )
 			stars.update();
 		if (tick % 17 == 0)
 			stars.create();
+
 		player.disp(tick);
 
 		for (size_t i = 0; i < stars.getData().size(); ++i)
