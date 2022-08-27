@@ -4,25 +4,6 @@
 #include <math.h>
 #include <iostream>
 
-
-class Object
-{
-	public:
-		Object() {};
-		Object(int x, int y, float vel) { pos.x = x; pos.y = y; velocity = vel;};
-		~Object() {};
-		void	update() {
-			pos.x += velocity;
-		};
-		vec2i	getPos() const
-		{
-			return pos;
-		};
-	private:
-		vec2i	pos;
-		float velocity;
-};
-
 class Objects //Fields
 {
 	public:
@@ -38,7 +19,7 @@ class Objects //Fields
 			}
 		};
 		void	create() {
-			Object s(80, rand() % 24, ((float)(rand()%2+2)/2) * -1);
+			Star s(game);
 			lst.push_back(s);
 		};
 		std::vector<Object> getData() const { return lst; };

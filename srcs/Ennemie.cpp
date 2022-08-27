@@ -9,6 +9,7 @@ Ennemie::Ennemie(char c, int x, int y, Game const &gameref): disp(c), game(gamer
 	pos.x = x;
 	pos.y = y;
 	velocity = setVelocity();
+	(void)disp;
 }
 
 Ennemie::~Ennemie() {}
@@ -30,18 +31,18 @@ float	Ennemie::xVelocity() {
 	int		i = rand() % 100;
 	float	x;
 
-	if (pos.x <= (game.getWidth() / 3))
-	{
-		if (i < 50)	// 50% de chance en diagonale "droite"
-			x = 1;
-		else if (i >= 50 && i < 70) // 20% de chance en petite diagonale
-			x = 0.5;
-		else if (i >= 70 && i < 90) // 20% de chance en grosse diagonale
-			x = 2;
-		else // 10% de chance en ligne droite
-			x = 0;
-	}
-	else if (pos.x > (game.getWidth() / 3) && pos.x < ((2 * game.getWidth()) / 3))
+	// if (pos.x <= (game.getWidth() / 3))
+	// {
+	// 	if (i < 50)	// 50% de chance en diagonale "droite"
+	// 		x = 1;
+	// 	else if (i >= 50 && i < 70) // 20% de chance en petite diagonale
+	// 		x = 0.5;
+	// 	else if (i >= 70 && i < 90) // 20% de chance en grosse diagonale
+	// 		x = 2;
+	// 	else // 10% de chance en ligne droite
+	// 		x = 0;
+	// }
+	/*else*/ if (pos.x < ((2 * game.getWidth()) / 3))
 	{
 		if (i < 20)	// 20% de chance en diagonale "droite"
 			x = 1;
