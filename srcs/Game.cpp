@@ -127,21 +127,25 @@ void	Game::run( void )
 			case 27: // Escape key
 				loop = false;
 				break;
+			case KEY_LEFT:
 			case 'a':
 				// if (ch == '<')
 					x--;
 				ch = '<';
 				break;
+			case KEY_RIGHT:
 			case 'd':
 				// if (ch == '>')
 					x++;
 				ch = '>';
 				break;
+			case KEY_UP:
 			case 'w':
 				// if (ch == '^')
 					y--;
 				ch = '^';
 				break;
+			case KEY_DOWN:
 			case 's':
 				// if (ch == 'V')
 					y++;
