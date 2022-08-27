@@ -5,10 +5,11 @@
 //	Constructors	//
 //					//
 
-Ennemie::Ennemie(char c, int x, int y, Game const &gameref): disp(c), game(gameref) {
+Ennemie::Ennemie(char c, int x, int y, Game const &gameref): game(gameref) {
 	pos.x = x;
 	pos.y = y;
 	velocity = setVelocity();
+	(void)c;
 }
 
 Ennemie::~Ennemie() {}
