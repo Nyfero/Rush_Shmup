@@ -136,13 +136,14 @@ void	Game::run( void )
 
 		if (tick % 5 == 0)
 			tanas.update();
-		if (tick > 1 && tick % 30 == 0)
+		if (tick > 250 && tick % 30 == 0)
 			tanas.create();
 
 		if (tick % 5 == 0)
 			stars.update();
 		if (tick % 17 == 0)
 			stars.create();
+
 		if ((tick % 15)/3)
 			mvwaddch(game_win, y, x-1, '>' | COLOR_PAIR(tick%2 ? Color::Yellow : Color::Red));
 		else
@@ -155,7 +156,6 @@ void	Game::run( void )
 
 		mvwaddch(game_win, y, x, '>' | COLOR_PAIR(Color::Blue));
 
-		
 		wrefresh(main_win);
 		wrefresh(game_win);
 

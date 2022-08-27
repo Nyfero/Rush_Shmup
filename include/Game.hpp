@@ -5,6 +5,7 @@
 # include <ncurses.h>
 # include <string>
 # include <unistd.h>
+# include "Color.hpp"
 /*
 uint8_t is guaranteed to be 8 bits
 uint_fast8_t is guaranteed to be >= 8 bits, much like an unsigned char
@@ -43,9 +44,6 @@ typedef struct s_rect{
 class Game
 {
 	public:
-		typedef enum {
-			White = 1, Red, Yellow, Green, Blue
-		} Color;
 
 		Game();
 		~Game();

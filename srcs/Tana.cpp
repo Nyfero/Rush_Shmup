@@ -5,8 +5,7 @@
 //	Constructors	//
 //					//
 
-Tana::Tana(Game *gameptr) {
-	game = gameptr;
+Tana::Tana(Game * gameptr): game(gameptr) {
 	pos.x = game->getWidth();
 	pos.y = rand() % game->getHeight() + 1;
 	velocity = setVelocity();
@@ -32,7 +31,7 @@ void	Tana::update() {
 }
 
 void	Tana::print() {
-	mvwaddch(game->getWin(), pos.y, pos.x, 'T' | COLOR_PAIR(Game::Color::Red));
+	mvwaddch(game->getWin(), pos.y, pos.x, 'H' | COLOR_PAIR(Color::Red));
 }
 
 void	Tana::clear() {
@@ -48,7 +47,7 @@ float	Tana::xVelocity() {
 	int		i = rand() % 100;
 	float	x;
 
-	// if (pos.x <= (game.getWidth() / 3))
+	// if (pos.x <= (game->getWidth() / 3))
 	// {
 	// 	if (i < 50)	// 50% de chance en diagonale "droite"
 	// 		x = 1;
