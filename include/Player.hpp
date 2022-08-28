@@ -22,6 +22,7 @@ class Player: public IEntity
 		//Functions
 		vec2i	getPos() const;
 		int		getLife() const;
+		int		getAmmo() const;
 		void	update();
 		void	move(int dir);
 		void	print();

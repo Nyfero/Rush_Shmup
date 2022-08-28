@@ -21,8 +21,11 @@ class Game
 		Game();
 		~Game();
 		
+		void	initColor( void );
 		void	run( void );
+
 		void	drawHud( Player & player );
+
 		// void	checkCollision( void );
 		operator bool() const;
 		int_fast16_t	getWidth() const;

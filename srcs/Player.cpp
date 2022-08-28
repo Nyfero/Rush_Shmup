@@ -64,6 +64,10 @@ int		Player::getLife() const {
 	return (life);
 }
 
+int		Player::getAmmo() const {
+	return (bullets);
+}
+
 void	Player::update() {
 	life--;
 }
