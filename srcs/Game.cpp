@@ -38,7 +38,7 @@ Game::Game() : _status(false)
 	start_color();
 
 	init_color(Color::CLightGray, r(74), r(72), r(72));
-	init_color(Color::CLightGray2, r(64), r(64), r(64));
+	init_color(Color::CLightGray2, r(100), r(100), r(100));
 	init_color(Color::CGray, r(5), r(5), r(11));
 
 	init_pair(Color::White, COLOR_WHITE, Color::CGray);
@@ -81,10 +81,10 @@ Game::~Game() {
 
 void	Game::run( void )
 {
-	Space<Star> stars(this);
-	Space<Tana> tanas(this);
+	Space<Star> 		stars(this);
+	Space<Tana> 		tanas(this);
 	Space<Hurricane>	hurricanes(this);
-	Space<Bullet> bullets(this);
+	Space<Bullet>		bullets(this);
 	
 	Player		player(this);
 	
@@ -163,19 +163,30 @@ void	Game::run( void )
 			bullets.update();
 
 		if (tick % 5 == 0)
-			tanas.update();
+		{
+			tanas.update(player);
+		}
 		if (tick > 250 && tick % 50 == 0)
 			tanas.create();
 
 		if (tick % 5 == 0)
-			hurricanes.update();
-		if (tick > 250 && tick % 30 == 0)
+		{
+			hurricanes.update(player);
+			Hurricane * current;
+			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
+			{
+				current = &hurricanes.getData().at(i);
+				if (tick % 50 == 0 && rand() % 2 == 0)
+					bullets.create(Source::SEnnemy, -1.0f, current->getPos().x, current->getPos().y);
+			}
+		}
+		if (tick > 500 && tick % 50 == 0)
 			hurricanes.create();
 
 		if (tick % 7 == 0)
-			stars.update();
+			stars.update(player);
 		if (tick % 10 == 0)
-			stars.update();
+			stars.update(player);
 		if (tick % 20 == 0)
 			stars.create();
 

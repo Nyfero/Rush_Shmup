@@ -26,7 +26,7 @@ vec2i	Bullet::getPos() const {
 }
 
 void 	Bullet::print() {
-	mvwaddch(_game->getWin(), _pos.y, _pos.x, '-' | COLOR_PAIR(Color::Yellow) | A_BOLD);
+	mvwaddch(_game->getWin(), _pos.y, _pos.x, '-' | (_source == Source::SPlayer ? COLOR_PAIR(Color::Yellow) : COLOR_PAIR(Color::Red)) | A_BOLD);
 }
 
 void 	Bullet::clear() {

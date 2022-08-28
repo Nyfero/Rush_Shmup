@@ -5,6 +5,7 @@
 # include "Game.hpp"
 # include "Bullet.hpp"
 # include "Star.hpp"
+# include "Player.hpp"
 # include <vector>
 
 template <typename T>
@@ -20,9 +21,14 @@ class Space
 		~Space() {};
 		
 		//Functions
-		void	update() {
+		void	update(Player & player) {
 			for (size_t i = 0; i < lst.size(); i++) {
-				if (lst.at(i).getPos().y > game->getHeight() || lst.at(i).getPos().y <= 0 || lst.at(i).getPos().x <= 0 )
+				if (!std::is_same<T, Star>::value &&  player.getPos() == lst.at(i).getPos())
+				{
+					player.update();
+					lst.erase(lst.begin() + i);
+				}
+				else if (lst.at(i).getPos().y > game->getHeight() || lst.at(i).getPos().y <= 0 || lst.at(i).getPos().x <= 0 )
 					lst.erase(lst.begin() + i);
 				else
 					lst.at(i).update();
