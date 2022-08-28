@@ -97,6 +97,14 @@ void	Game::drawHud( Player & player )
 		mvwaddstr(main_win, screen_size.height() - 3, 10 + i+2, "  ");
 		wattroff(main_win, COLOR_PAIR(Color::HP_1)); 
 	}
+	
+	std::string minute(std::to_string(tick/6000));
+	if (minute[0] == '0')
+		minute.clear();
+	else
+		minute.append("m");
+
+	mvwprintw(main_win, screen_size.height()-3, 14+ MAX_HP*2, "Time: %s %ds", minute.c_str(), (tick/100)%60);
 	wrefresh(main_win);
 }
 
