@@ -135,7 +135,7 @@ void	Game::drawHud( Player & player )
 		minute.clear();
 	else
 		minute.append("m");
-	mvwprintw(main_win, screen_size.height()-3, cursor, "Time: %s %ds", minute.c_str(), (tick/100)%60);
+	mvwprintw(main_win, screen_size.height()-3, cursor, "Time: %s %lds", minute.c_str(), (tick/100)%60);
 
 	cursor += std::snprintf( nullptr, 0, "Time: %s %lds ", minute.c_str(), (tick/100)%60 ) + 2;
 	
