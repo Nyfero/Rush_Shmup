@@ -41,6 +41,7 @@ Game::Game() : _status(false)
 	init_color(Color::CLightGray, r(74), r(72), r(72));
 	init_color(Color::CLightGray2, r(100), r(100), r(100));
 	init_color(Color::CGray, r(5), r(5), r(11));
+	init_color(Color::COrange, r(0xFF), r(0x7f), r(0x00));
 
 	init_pair(Color::White, COLOR_WHITE, Color::CGray);
 	init_pair(Color::Red, COLOR_RED, Color::CGray);
@@ -50,7 +51,10 @@ Game::Game() : _status(false)
 	init_pair(Color::CStar, Color::CLightGray, Color::CGray);
 	init_pair(Color::CStar2, Color::CLightGray2, Color::CGray);
 	init_pair(Color::Gray, COLOR_WHITE, Color::CGray);
+
 	init_pair(Color::HP_1, COLOR_GREEN, COLOR_GREEN);
+	init_pair(Color::HP_2, Color::COrange, Color::COrange);
+	init_pair(Color::HP_3, COLOR_RED, COLOR_RED);
 	
 	screen_size = {{0, 0}, {80, 24}};
 	game_size = {{0, 0}, {screen_size.width() - 2, screen_size.height() - info_height - 4}};
@@ -84,6 +88,7 @@ Game::~Game() {
 
 void	Game::drawHud( Player & player )
 {
+	int cursor = 2;
 	werase(main_win);
 	wattron(main_win, A_BOLD);
 	box(main_win, 0, 0);
@@ -93,18 +98,44 @@ void	Game::drawHud( Player & player )
 	mvwaddstr(main_win, screen_size.height()- 3, 2, "Health: ");
 	for (int i = 0; i < player.getLife(); i++)
 	{
-		wattron(main_win, COLOR_PAIR(Color::HP_1));
+		if (player.getLife() < MAX_HP/2)
+			wattron(main_win, COLOR_PAIR(Color::HP_2));
+		else if (player.getLife() < MAX_HP/3)
+			wattron(main_win, COLOR_PAIR(Color::HP_3));
+		else
+			wattron(main_win, COLOR_PAIR(Color::HP_1));
+		
 		mvwaddstr(main_win, screen_size.height() - 3, 10 + i+2, "  ");
-		wattroff(main_win, COLOR_PAIR(Color::HP_1)); 
+
+		if (i < MAX_HP/2)
+			wattroff(main_win, COLOR_PAIR(Color::HP_2));
+		else if (i <= MAX_HP/3)
+			wattroff(main_win, COLOR_PAIR(Color::HP_3));
+		else
+			wattroff(main_win, COLOR_PAIR(Color::HP_1));
 	}
-	
+	cursor += 11 + MAX_HP*2;
 	std::string minute(std::to_string(tick/6000));
 	if (minute[0] == '0')
 		minute.clear();
 	else
 		minute.append("m");
+	mvwprintw(main_win, screen_size.height()-3, cursor, "Time: %s %ds", minute.c_str(), (tick/100)%60);
 
-	mvwprintw(main_win, screen_size.height()-3, 14+ MAX_HP*2, "Time: %s %ds", minute.c_str(), (tick/100)%60);
+	cursor += std::snprintf( nullptr, 0, "Time: %s %lds ", minute.c_str(), (tick/100)%60 ) + 2;
+	
+	mvwaddstr(main_win, screen_size.height()- 3, cursor, "Ammos: ");
+	cursor += 7;
+	for (int i = 0; i < player.getAmmo(); i++)
+	{
+		// wattron(main_win, COLOR_PAIR(Color::HP_2));
+
+		mvwaddch(main_win, screen_size.height() - 3, cursor + i*2, ' ' | COLOR_PAIR(Color::HP_2));
+
+		// wattroff(main_win, COLOR_PAIR(Color::HP_2));
+	}
+
+
 	wrefresh(main_win);
 }
 

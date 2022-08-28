@@ -2,7 +2,7 @@ NAME		=	ft_shmup
 
 CC			=	c++
 LIBS		=	-lncurses
-CFLAGS		=	-Wall -Wextra -Werror -g3 -std=c++11 -I/usr/include/ -Iinclude
+CFLAGS		=	-Wall -Wextra -Werror -g3 -I/usr/include/ -Iinclude
 ifeq ($(DEBUG), 1)
 	CFLAGS		+= -DDEBUG=1
 endif
