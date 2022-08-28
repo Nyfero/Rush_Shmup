@@ -18,7 +18,7 @@ class Game
 		~Game();
 		
 		void	run( void );
-		void	checkCollision( void );
+		// void	checkCollision( void );
 		operator bool() const;
 		int_fast16_t	getWidth() const;
 		int_fast16_t	getHeight() const;

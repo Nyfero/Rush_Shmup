@@ -60,6 +60,12 @@ int		Player::shoot() { //Renvoie 1 s'il y a 1 balle, sinon renvoie 0
 	return (0);
 }
 
-void	Player::update() {}
+int		Player::getLife() const {
+	return (life);
+}
+
+void	Player::update() {
+	life--;
+}
 
 void	Player::print() {}

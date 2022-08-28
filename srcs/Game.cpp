@@ -162,6 +162,46 @@ void	Game::run( void )
 		if (tick % 4 == 0)
 			bullets.update();
 
+			for (size_t i = 0; i < bullets.getData().size(); ++i)
+			{
+				Bullet	*b = &bullets.getData().at(i);
+				
+				//Check si balle player touche
+				if (b->getSource() == Source::SPlayer)
+				{
+					for (size_t j = 0; j < hurricanes.getData().size(); ++j)
+					{
+						if (b->getPos() == hurricanes.getData().at(j).getPos())
+						{
+							hurricanes.getData().at(j).clear();
+							hurricanes.getData().erase(j);
+							b->clear();
+							bullets.getData().erase(i);
+							b = NULL;
+						}
+					}
+					for (size_t j = 0; b != NULL && j < tanas.getData().size(); ++j)
+					{
+						if (b->getPos() == tanas.getData().at(j).getPos())
+						{
+							tanas.getData().at(j).clear();
+							tanas.getData().erase(j);
+							b->clear();
+							bullets.getData().erase(i);
+						}
+					}
+				}
+				//Check si balle ennemi touche
+				else if (b->getPos() == player.getPos())
+				{
+					player.update();
+					b->clear();
+					bullets.getData().erase(i);
+					if (player.getLife() == 0)
+						loop = false;
+				}
+			}
+			
 		if (tick % 5 == 0)
 		{
 			tanas.update(player);
@@ -210,6 +250,47 @@ void	Game::run( void )
 	}
 }
 
+// void	Game::checkCollision() {
+// 	for (size_t i = 0; i < bullets.getData().size(); ++i)
+// 	{
+// 		Bullet	*b = &bullets.getData().at(i);
+// 
+// 		//Check si balle player touche
+// 		if (b->getSource() == Source::SPlayer)
+// 		{
+// 			for (size_t j = 0; j < hurricanes.getData().size(); ++j)
+// 			{
+// 				if (b->getPos() == hurricanes.getData().at(j).getPos())
+// 				{
+// 					hurricanes.getData().at(j).clear();
+// 					hurricanes.getData().erase(j);
+// 					b->clear();
+// 					bullets.getData().erase(i);
+// 					b = NULL;
+// 				}
+// 			}
+// 			for (size_t j = 0; b != NULL && j < tanas.getData().size(); ++j)
+// 			{
+// 				if (b->getPos() == tanas.getData().at(j).getPos())
+// 				{
+// 					tanas.getData().at(j).clear();
+// 					tanas.getData().erase(j);
+// 					b->clear();
+// 					bullets.getData().erase(i);
+// 				}
+// 			}
+// 		}
+// 		//Check si balle ennemi touche
+// 		else if (b->getPos() == player.getPos())
+// 		{
+// 			player.update();
+// 			b->clear();
+// 			bullets.getData().erase(i);
+// 			if (player.getLife() == 0)
+// 				_loop = false;
+// 		}
+// 	}
+// }
 
 Game::operator bool() const {
 	return (_status);
