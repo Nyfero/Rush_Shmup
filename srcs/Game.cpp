@@ -189,6 +189,7 @@ void	Game::run( void )
 					if (b->getPos() == tanas.getData().at(j).getPos())
 					{
 						tanas.remove(j);
+						bullets.remove(i);
 						break;
 					}
 				}
@@ -197,9 +198,8 @@ void	Game::run( void )
 			else if (b->getPos() == player.getPos())
 			{
 				player.update();
-				b->clear();
-				bullets.getData().erase(bullets.getData().begin() + i);
-				if (player.getLife() == 0)
+				bullets.remove(i);
+				if (player.getLife() <= 0)
 					loop = false;
 			}
 			b = NULL;
@@ -219,6 +219,8 @@ void	Game::run( void )
 			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			{
 				current = &hurricanes.getData().at(i);
+				if (current == NULL)
+					continue;
 				if (tick % 50 == 0 && rand() % 2 == 0)
 					bullets.create(Source::SEnnemy, -1.0f, current->getPos().x, current->getPos().y);
 			}
@@ -259,35 +261,35 @@ void	Game::run( void )
 // 		Bullet	*b = &bullets.getData().at(i);
 // 
 // 		//Check si balle player touche
-// 		if (b->getSource() == Source::SPlayer)
+// 		if (bullets.getData().at(i).getSource() == Source::SPlayer)
 // 		{
 // 			for (size_t j = 0; j < hurricanes.getData().size(); ++j)
 // 			{
-// 				if (b->getPos() == hurricanes.getData().at(j).getPos())
+// 				if (bullets.getData().at(i).getPos() == hurricanes.getData().at(j).getPos())
 // 				{
 // 					hurricanes.getData().at(j).clear();
 // 					hurricanes.getData().erase(j);
-// 					b->clear();
+// 					bullets.getData().at(i).clear();
 // 					bullets.getData().erase(i);
 // 					b = NULL;
 // 				}
 // 			}
 // 			for (size_t j = 0; b != NULL && j < tanas.getData().size(); ++j)
 // 			{
-// 				if (b->getPos() == tanas.getData().at(j).getPos())
+// 				if (bullets.getData().at(i).getPos() == tanas.getData().at(j).getPos())
 // 				{
 // 					tanas.getData().at(j).clear();
 // 					tanas.getData().erase(j);
-// 					b->clear();
+// 					bullets.getData().at(i).clear();
 // 					bullets.getData().erase(i);
 // 				}
 // 			}
 // 		}
 // 		//Check si balle ennemi touche
-// 		else if (b->getPos() == player.getPos())
+// 		else if (bullets.getData().at(i).getPos() == player.getPos())
 // 		{
 // 			player.update();
-// 			b->clear();
+// 			bullets.getData().at(i).clear();
 // 			bullets.getData().erase(i);
 // 			if (player.getLife() == 0)
 // 				_loop = false;

@@ -8,7 +8,7 @@
 Tana::Tana(Game *gameptr) { //Initialise un Tana qui avance en ligne droite
 	game = gameptr;
 	pos.x = game->getWidth();
-	pos.y = rand() % game->getHeight() + 1;
+	pos.y = rand() % (game->getHeight() + 2);
 }
 
 Tana::~Tana() {}
