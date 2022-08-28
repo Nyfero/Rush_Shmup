@@ -122,7 +122,7 @@ void	Game::run( void )
 	
 	int	input;
 	loop = true;
-	int lock = 0;
+	int boss = 0;
 
 	drawHud(player);
 	wrefresh(game_win);
@@ -131,6 +131,8 @@ void	Game::run( void )
 	while(player.getLife() > 0 && loop == true)
 	{
 		input = tolower(wgetch(main_win));
+
+		/*	CLEAR ALL ENTITY	*/
 
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).clear();
@@ -146,6 +148,10 @@ void	Game::run( void )
 		player.clear();
 		glaives.clear();
 
+		/*	--------------------------------------------	*/
+		
+		/*	PLAYER INPUT	*/
+		
 		switch (input)
 		{
 			case 'q':
@@ -180,16 +186,14 @@ void	Game::run( void )
 				wresize(main_win, screen_size.height(), screen_size.width());
 				break;
 		}
-
-		if (tick % 40 == 0)
-		{
-			glaives.update();
-			player.reload();
-		}
-
+		
+		/*	--------------------------------------------------	*/
+		
+		/*	UPDATE BULLET AND CHECK COLLISION	*/
+		
 		if (tick % 4 == 0)
 			bullets.update();
-
+		
 		Bullet	*b = NULL;
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 		{
@@ -253,26 +257,52 @@ void	Game::run( void )
 			}
 			b = NULL;
 		}
-			
-		if (tick % 5 == 0)
-		{
-			tanas.update(player);
-		}
-		// if (tick > 250 && tick % 200 == 0)
-		// 	tanas.create();
+		
+		/*	--------------------------------------------	*/
+		
+		/*	UPDATE ALL ENTITY	*/
 
+		//	update player bullets
+		if (tick % 40 == 0)
+			player.reload();
+		
+		//	update stars
+		if (boss == 0)
+		{
+			if (tick % 7 == 0)
+			stars.update(player);
+			if (tick % 10 == 0)
+			stars.update(player);
+			if (tick % 20 == 0)
+			stars.create();
+		}
+		
+		//	update tanas
+		if (tick % 5 == 0)
+			tanas.update(player);
+		if (tick > 250 && tick % 200 == 0 && boss == 0)
+			tanas.create();
+		
+		//	update hurricanes
 		if (tick % 10 == 0)
 		{
 			hurricanes.update(player);
 			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			{
 				if (tick % 50 == 0 && rand() % 2 == 0)
-					bullets.create(Source::SEnnemy, {-1, 0} , hurricanes.getData().at(i).getPos());
+				bullets.create(Source::SEnnemy, {-1, 0} , hurricanes.getData().at(i).getPos());
 			}
+		}
+		if (tick > 1 && tick % 500 == 0 && boss == 0)
+			hurricanes.create();
+		
+		//	update scorpius
+		if (tick % 20 == 0 && boss == 1)
+		{
 			scorpius.update(player);
 			for (size_t i = 0; i < scorpius.getData().size(); ++i)
 			{
-				if (tick % 250 == 0)
+				if (tick % 150 == 0)
 				{
 					bullets.create(Source::SEnnemy, {-1, 1} , scorpius.getData().at(i).getPos());
 					bullets.create(Source::SEnnemy, {-1, -1} , scorpius.getData().at(i).getPos());
@@ -282,44 +312,58 @@ void	Game::run( void )
 					bullets.create(Source::SEnnemy, {1, 0} , scorpius.getData().at(i).getPos());
 				}
 			}
-			
 		}
-		// if (/*tick > 500 && */tick % 500 == 0)
-		// 	hurricanes.create();
+		if (boss == 1)
+			if (tick % 400 == 0)
+				scorpius.create();
 
-		if (lock == 0)
+		//	update glaives
+		if (boss == 1 && tick % 50 == 0)
 		{
-			lock = 1;
+			glaives.update();
+			if (tick % 100 == 0)
+			{
+				bullets.create(Source::SEnnemy, {-1, 0} , glaives.getUpWeapon());
+				bullets.create(Source::SEnnemy, {-1, 0} , glaives.getDownWeapon());
+			}
+			if (tick % 500 == 0)
+			{
+				bullets.create(Source::SEnnemy, {-1, 1} , glaives.getUpWeapon());
+				bullets.create(Source::SEnnemy, {-1, 1} , glaives.getDownWeapon());
+				bullets.create(Source::SEnnemy, {-1, -1} , glaives.getUpWeapon());
+				bullets.create(Source::SEnnemy, {-1, -1} , glaives.getDownWeapon());
+				bullets.create(Source::SEnnemy, {-1, 0} , glaives.getPos());
+				bullets.create(Source::SEnnemy, {-1, 1} , glaives.getPos());
+				bullets.create(Source::SEnnemy, {-1, -1} , glaives.getPos());
+			}
 		}
-		if (lock == 0)
-		{
-			if (tick % 7 == 0)
-				stars.update(player);
-			if (tick % 10 == 0)
-				stars.update(player);
-			if (tick % 20 == 0)
-				stars.create();
-		}
+		if (tick > 1 && tick % 1000 == 0)
+			boss = 1;
+				
+		/*	PRINT ALL ENTITY	*/
 
-		// if (lock == 1)
-		// 	if (tick % 400 == 0)
-		// 		scorpius.create();
-
-		for (size_t i = 0; i < bullets.getData().size(); ++i)
-			bullets.getData().at(i).print();
-		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
-			hurricanes.getData().at(i).print();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
+		for (size_t i = 0; i < bullets.getData().size(); ++i)
+			bullets.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).print();
-		for (size_t i = 0; i < scorpius.getData().size(); ++i)
-			scorpius.getData().at(i).print();
+		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
+			hurricanes.getData().at(i).print();
+		if (boss == 1)
+			for (size_t i = 0; i < scorpius.getData().size(); ++i)
+				scorpius.getData().at(i).print();
 
-		if (glaives.getLife() > 0)
-			glaives.print();
+		if (boss == 1)
+		{
+			if (glaives.getLife() > 0)
+				glaives.print();
+			else
+				boss = 0;
+		}
 		player.disp(tick);
 
+		/*	---------------------------------------------	*/
 		
 		drawHud(player);
 		wrefresh(game_win);

@@ -24,6 +24,8 @@ class Glaive: public IEntity
 		vec2i	getPos() const;
 		void	hit();
 		int		getLife() const;
+		vec2i	getUpWeapon() const;
+		vec2i	getDownWeapon() const;
 };
 
 #endif
