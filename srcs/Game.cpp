@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include "Tana.hpp"
 #include "Hurricane.hpp"
+#include "Glaive.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -85,12 +86,14 @@ void	Game::run( void )
 	Space<Tana> 		tanas(this);
 	Space<Hurricane>	hurricanes(this);
 	Space<Bullet>		bullets(this);
+	Space<Glaive>		glaives(this);
 	
 	Player		player(this);
 	
 	int	input;
 	bool loop = true;
-
+	int lock = 0;
+			
 	wattron(main_win, A_BOLD);
 	box(main_win, 0, 0);
 	wattroff(main_win, A_BOLD);
@@ -100,12 +103,14 @@ void	Game::run( void )
 	wrefresh(game_win);
 	
 	tick = 0;
-	while(loop)
+	while(loop || player.getLife() <= 0)
 	{
 		input = tolower(wgetch(main_win));
 
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).clear();
+		for (size_t i = 0; i < glaives.getData().size(); ++i)
+			glaives.getData().at(i).clear();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).clear();
 		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
@@ -119,7 +124,6 @@ void	Game::run( void )
 		{
 			case 'q':
 			case 27: // Escape key
-				std::cerr << tanas.getData().capacity();
 				loop = false;
 				break;
 			case KEY_LEFT:
@@ -158,7 +162,10 @@ void	Game::run( void )
 		}
 
 		if (tick % 40 == 0)
+		{
+			glaives.update(player);
 			player.reload();
+		}
 
 		if (tick % 4 == 0)
 			bullets.update();
@@ -199,8 +206,6 @@ void	Game::run( void )
 			{
 				player.update();
 				bullets.remove(i);
-				if (player.getLife() <= 0)
-					loop = false;
 			}
 			b = NULL;
 		}
@@ -221,20 +226,32 @@ void	Game::run( void )
 					bullets.create(Source::SEnnemy, -1.0f, hurricanes.getData().at(i).getPos().x, hurricanes.getData().at(i).getPos().y);
 			}
 		}
-		if (/*tick > 500 && */tick % 500 == 0)
-			hurricanes.create();
+		// if (/*tick > 500 && */tick % 500 == 0)
+		// 	hurricanes.create();
 
-		if (tick % 7 == 0)
-			stars.update(player);
-		if (tick % 10 == 0)
-			stars.update(player);
-		if (tick % 20 == 0)
-			stars.create();
+		if (lock == 0)
+		{
+			glaives.create();
+			lock = 1;
+		}
+		if (lock == 0)
+		{
+			if (tick % 7 == 0)
+				stars.update(player);
+			if (tick % 10 == 0)
+				stars.update(player);
+			if (tick % 20 == 0)
+				stars.create();
+		}
+
+
 
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).print();
 		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			hurricanes.getData().at(i).print();
+		for (size_t i = 0; i < glaives.getData().size(); ++i)
+			glaives.getData().at(i).print();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
