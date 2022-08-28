@@ -209,8 +209,8 @@ void	Game::run( void )
 		{
 			tanas.update(player);
 		}
-		if (tick > 250 && tick % 200 == 0)
-			tanas.create();
+		// if (tick > 250 && tick % 200 == 0)
+		// 	tanas.create();
 
 		if (tick % 10 == 0)
 		{
@@ -221,11 +221,12 @@ void	Game::run( void )
 				current = &hurricanes.getData().at(i);
 				if (current == NULL)
 					continue;
-				if (tick % 50 == 0 && rand() % 2 == 0)
+				if (tick % 50 == 0)
 					bullets.create(Source::SEnnemy, -1.0f, current->getPos().x, current->getPos().y);
+				current = NULL;
 			}
 		}
-		if (tick > 500 && tick % 1000 == 0)
+		if (/*tick > 500 && */tick % 500 == 0)
 			hurricanes.create();
 
 		if (tick % 7 == 0)
