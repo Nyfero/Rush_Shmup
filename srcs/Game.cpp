@@ -50,6 +50,7 @@ Game::Game() : _status(false)
 	init_pair(Color::CStar, Color::CLightGray, Color::CGray);
 	init_pair(Color::CStar2, Color::CLightGray2, Color::CGray);
 	init_pair(Color::Gray, COLOR_WHITE, Color::CGray);
+	init_pair(Color::HP_1, COLOR_GREEN, COLOR_GREEN);
 	
 	screen_size = {{0, 0}, {80, 24}};
 	game_size = {{0, 0}, {screen_size.width() - 2, screen_size.height() - info_height - 4}};
@@ -80,6 +81,24 @@ Game::~Game() {
 //	Functions	//
 //				//
 
+void	Game::drawHud( Player & player )
+{
+	werase(main_win);
+	wattron(main_win, A_BOLD);
+	box(main_win, 0, 0);
+	wattroff(main_win, A_BOLD);
+	wmove(main_win, game_size.bottom() + 3, 1);
+	whline(main_win, '-', screen_size.width()- 2);
+	mvwaddstr(main_win, screen_size.height()- 3, 2, "Health: ");
+	for (int i = 0; i < player.getLife(); i++)
+	{
+		wattron(main_win, COLOR_PAIR(Color::HP_1));
+		mvwaddstr(main_win, screen_size.height() - 3, 10 + i+2, "  ");
+		wattroff(main_win, COLOR_PAIR(Color::HP_1)); 
+	}
+	wrefresh(main_win);
+}
+
 void	Game::run( void )
 {
 	Space<Star> 		stars(this);
@@ -91,15 +110,10 @@ void	Game::run( void )
 	Player		player(this);
 	
 	int	input;
-	bool loop = true;
+	loop = true;
 	int lock = 0;
-			
-	wattron(main_win, A_BOLD);
-	box(main_win, 0, 0);
-	wattroff(main_win, A_BOLD);
-	wmove(main_win, game_size.bottom() + 3, 1);
-	whline(main_win, '-', screen_size.width()- 2);
-	wrefresh(main_win);
+
+	drawHud(player);
 	wrefresh(game_win);
 	
 	tick = 0;
@@ -150,14 +164,8 @@ void	Game::run( void )
 				if (player.shoot())
 					bullets.create(Source::SPlayer, 1.0f, player.getPos().x, player.getPos().y);
 				break;
-			case 410:
-				werase(main_win);
-				werase(game_win);
-				wattron(main_win, A_BOLD);
-				box(main_win, 0, 0);
-				wattroff(main_win, A_BOLD);
-				wmove(main_win, game_size.bottom() + 3, 1);
-				whline(main_win, '-', screen_size.width()- 2);
+			case KEY_RESIZE:
+				wresize(main_win, screen_size.height(), screen_size.width());
 				break;
 		}
 
@@ -260,7 +268,7 @@ void	Game::run( void )
 		player.disp(tick);
 
 		
-		wrefresh(main_win);
+		drawHud(player);
 		wrefresh(game_win);
 
 		++tick;

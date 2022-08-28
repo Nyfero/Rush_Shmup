@@ -4,7 +4,7 @@
 
 typedef enum {
 	White = 1, Red, Yellow, Green, Blue, Gray, CStar, CStar2, 
-	CLightGray, CLightGray2, CGray
+	CLightGray, CLightGray2, CGray, HP_1
 } Color;
 
 #endif
