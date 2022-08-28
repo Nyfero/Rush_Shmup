@@ -43,4 +43,6 @@ typedef enum {
 	SPlayer, SEnnemy
 } Source;
 
+int	r(const int val);
+
 # endif

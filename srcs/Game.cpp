@@ -14,6 +14,7 @@
 
 int	Game::info_height = 4;
 
+
 Game::Game() : _status(false)
 {
 	srand(time(NULL));
@@ -35,11 +36,18 @@ Game::Game() : _status(false)
 	}
 	start_color();
 
-	init_pair(Color::White, COLOR_WHITE, COLOR_BLACK);
-	init_pair(Color::Red, COLOR_RED, COLOR_BLACK);
-	init_pair(Color::Yellow, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(Color::Green, COLOR_GREEN, COLOR_BLACK);
-	init_pair(Color::Blue, COLOR_BLUE, COLOR_BLACK);
+	init_color(Color::CLightGray, r(74), r(72), r(72));
+	init_color(Color::CLightGray2, r(64), r(64), r(64));
+	init_color(Color::CGray, r(5), r(5), r(11));
+
+	init_pair(Color::White, COLOR_WHITE, Color::CGray);
+	init_pair(Color::Red, COLOR_RED, Color::CGray);
+	init_pair(Color::Yellow, COLOR_YELLOW, Color::CGray);
+	init_pair(Color::Green, COLOR_GREEN, Color::CGray);
+	init_pair(Color::Blue, COLOR_BLUE, Color::CGray);
+	init_pair(Color::CStar, Color::CLightGray, Color::CGray);
+	init_pair(Color::CStar2, Color::CLightGray2, Color::CGray);
+	init_pair(Color::Gray, COLOR_WHITE, Color::CGray);
 	
 	screen_size = {{0, 0}, {80, 24}};
 	game_size = {{0, 0}, {screen_size.width() - 2, screen_size.height() - info_height - 4}};
@@ -52,7 +60,8 @@ Game::Game() : _status(false)
 	
 	nodelay(main_win, true);
 	nodelay(game_win, true);
-	bkgd(COLOR_PAIR(1));
+	wbkgd(main_win, COLOR_PAIR(Color::Gray));
+	wbkgd(game_win, COLOR_PAIR(Color::Gray));
 	refresh();
 
 
@@ -173,7 +182,7 @@ void	Game::run( void )
 		wrefresh(game_win);
 
 		++tick;
-		usleep(10000); // 1ms
+		usleep(10000); // 10ms
 	}
 }
 
