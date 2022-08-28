@@ -7,8 +7,10 @@
 # include <unistd.h>
 
 # include "Utils.hpp"
+# include "Player.hpp"
 # include "Color.hpp"
 
+class Player;
 
 class Game
 {
@@ -18,6 +20,7 @@ class Game
 		~Game();
 		
 		void	run( void );
+		void	drawHud( Player & player );
 		// void	checkCollision( void );
 		operator bool() const;
 		int_fast16_t	getWidth() const;
@@ -26,16 +29,17 @@ class Game
 		WINDOW*			getWin();
 
 	private:
-		WINDOW*	main_win;
-		WINDOW*	game_win;
-		rect	screen_size;
-		rect	game_size;
-		long	tick;
+		WINDOW*		main_win;
+		WINDOW*		game_win;
+		rect		screen_size;
+		rect		game_size;
+		long		tick;
 		// Space<Tana> tanas;
 		// Space<Bullet> bullets;
 		// Space<Star> stars;
 		static int info_height;
-		bool	_status;
+		bool		loop;
+		bool		_status;
 };
 
 #endif

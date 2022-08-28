@@ -8,7 +8,7 @@ Player::Player(Game *gameptr) { //Initialise le joueur
 	game = gameptr;
 	pos.x = game->getWidth() / 4;	// Place le joueur au centre de la carte
 	pos.y = game->getHeight() / 2;
-	life = 100;
+	life = 3;
 	bullets = 10;
 }
 

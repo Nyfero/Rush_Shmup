@@ -4,6 +4,8 @@
 # include "IEntity.hpp"
 # include "Game.hpp" 
 
+class Game;
+
 class Player: public IEntity
 {
 	private:
