@@ -70,8 +70,8 @@ class Space<Bullet>
 			}
 		};
 
-		void	create(Source source, float velocity, int_fast16_t x, int_fast16_t y) {
-			Bullet entity(game, source, velocity, x, y);
+		void	create(Source source, vec2i velocity, vec2i pos) {
+			Bullet entity(game, source, velocity, pos);
 			lst.push_back(entity);
 		};
 

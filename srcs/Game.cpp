@@ -5,6 +5,7 @@
 #include "Tana.hpp"
 #include "Hurricane.hpp"
 #include "Glaive.hpp"
+#include "Scorpius.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -105,9 +106,10 @@ void	Game::run( void )
 	Space<Tana> 		tanas(this);
 	Space<Hurricane>	hurricanes(this);
 	Space<Bullet>		bullets(this);
-	Space<Glaive>		glaives(this);
+	Space<Scorpius>		scorpius(this);
 	
 	Player		player(this);
+	Glaive		glaives(this);
 	
 	int	input;
 	loop = true;
@@ -117,22 +119,23 @@ void	Game::run( void )
 	wrefresh(game_win);
 	
 	tick = 0;
-	while(loop || player.getLife() <= 0)
+	while(player.getLife() > 0 && loop == true)
 	{
 		input = tolower(wgetch(main_win));
 
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).clear();
-		for (size_t i = 0; i < glaives.getData().size(); ++i)
-			glaives.getData().at(i).clear();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).clear();
 		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			hurricanes.getData().at(i).clear();
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).clear();
+		for (size_t i = 0; i < scorpius.getData().size(); ++i)
+			scorpius.getData().at(i).clear();
 
 		player.clear();
+		glaives.clear();
 
 		switch (input)
 		{
@@ -162,7 +165,7 @@ void	Game::run( void )
 				break;
 			case ' ':
 				if (player.shoot())
-					bullets.create(Source::SPlayer, 1.0f, player.getPos().x, player.getPos().y);
+					bullets.create(Source::SPlayer, {1, 0}, player.getPos());
 				break;
 			case KEY_RESIZE:
 				wresize(main_win, screen_size.height(), screen_size.width());
@@ -171,7 +174,7 @@ void	Game::run( void )
 
 		if (tick % 40 == 0)
 		{
-			glaives.update(player);
+			glaives.update();
 			player.reload();
 		}
 
@@ -205,8 +208,32 @@ void	Game::run( void )
 					{
 						tanas.remove(j);
 						bullets.remove(i);
+						b = NULL;
 						break;
 					}
+				}
+				if (b == NULL)
+					continue;
+				for (size_t j = 0; j < scorpius.getData().size(); ++j)
+				{
+					if (b->getPos() == scorpius.getData().at(j).getPos())
+					{
+						scorpius.remove(j);
+						bullets.remove(i);
+						b = NULL;
+						break;
+					}
+				}
+				if (b == NULL)
+					continue;
+				if (b->getPos() == glaives.getPos())
+				{
+					glaives.hit();
+					if (glaives.getLife() <= 0)
+						glaives.clear();
+					bullets.remove(i);
+					break;
+				
 				}
 			}
 			//Check si balle ennemi touche
@@ -231,15 +258,28 @@ void	Game::run( void )
 			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			{
 				if (tick % 50 == 0 && rand() % 2 == 0)
-					bullets.create(Source::SEnnemy, -1.0f, hurricanes.getData().at(i).getPos().x, hurricanes.getData().at(i).getPos().y);
+					bullets.create(Source::SEnnemy, {-1, 0} , hurricanes.getData().at(i).getPos());
 			}
+			scorpius.update(player);
+			for (size_t i = 0; i < scorpius.getData().size(); ++i)
+			{
+				if (tick % 250 == 0)
+				{
+					bullets.create(Source::SEnnemy, {-1, 1} , scorpius.getData().at(i).getPos());
+					bullets.create(Source::SEnnemy, {-1, -1} , scorpius.getData().at(i).getPos());
+					bullets.create(Source::SEnnemy, {-1, 0} , scorpius.getData().at(i).getPos());
+					bullets.create(Source::SEnnemy, {1, 1} , scorpius.getData().at(i).getPos());
+					bullets.create(Source::SEnnemy, {1, -1} , scorpius.getData().at(i).getPos());
+					bullets.create(Source::SEnnemy, {1, 0} , scorpius.getData().at(i).getPos());
+				}
+			}
+			
 		}
 		// if (/*tick > 500 && */tick % 500 == 0)
 		// 	hurricanes.create();
 
 		if (lock == 0)
 		{
-			glaives.create();
 			lock = 1;
 		}
 		if (lock == 0)
@@ -252,19 +292,23 @@ void	Game::run( void )
 				stars.create();
 		}
 
-
+		// if (lock == 1)
+		// 	if (tick % 400 == 0)
+		// 		scorpius.create();
 
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).print();
 		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			hurricanes.getData().at(i).print();
-		for (size_t i = 0; i < glaives.getData().size(); ++i)
-			glaives.getData().at(i).print();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
 			tanas.getData().at(i).print();
+		for (size_t i = 0; i < scorpius.getData().size(); ++i)
+			scorpius.getData().at(i).print();
 
+		if (glaives.getLife() > 0)
+			glaives.print();
 		player.disp(tick);
 
 		

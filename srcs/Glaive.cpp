@@ -90,3 +90,13 @@ void	Glaive::update() {
 vec2i	Glaive::getPos() const {
 	return (pos);
 }
+
+int		Glaive::getLife() const {
+	return (life);
+}
+
+#include <iostream>
+void 	Glaive::hit() {
+	std::cerr << life << "\n";
+	life--;
+}
