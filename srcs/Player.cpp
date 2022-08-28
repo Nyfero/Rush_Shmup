@@ -5,7 +5,7 @@
 //					//
 
 int	Player::maxAmmos = 10;
-int Player::maxLife  = 6;
+int Player::maxLife  = 3;
 
 
 Player::Player(Game *gameptr) { //Initialise le joueur
