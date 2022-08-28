@@ -22,7 +22,7 @@ Game::Game() : _status(false)
 	
 	main_win = initscr();
 	if (!main_win)
-	return ;
+		return ;
 	cbreak(); // Wait key not line ?
 	noecho(); // No print key on press
 	clear();
@@ -62,6 +62,7 @@ Game::Game() : _status(false)
 	
 	nodelay(main_win, true);
 	nodelay(game_win, true);
+	wbkgd(stdscr, COLOR_PAIR(Color::Gray));
 	wbkgd(main_win, COLOR_PAIR(Color::Gray));
 	wbkgd(game_win, COLOR_PAIR(Color::Gray));
 	refresh();
