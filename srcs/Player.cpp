@@ -5,13 +5,24 @@
 //					//
 
 int	Player::maxAmmos = 10;
+int Player::maxLife  = 6;
 
 
 Player::Player(Game *gameptr) { //Initialise le joueur
 	game = gameptr;
 	pos.x = game->getWidth() / 4;	// Place le joueur au centre de la carte
 	pos.y = game->getHeight() / 2;
-	life = MAX_HP;
+	life = maxLife;
+	bullets = Player::maxAmmos;
+	color = Color::Blue;
+}
+
+Player::Player(Game *gameptr, Color color_) { //Initialise le joueur
+	game = gameptr;
+	color = color_;
+	pos.x = game->getWidth() / 4;	// Place le joueur au centre de la carte
+	pos.y = game->getHeight() / 2 + (color == Color::Purple ? 4 : 0);
+	life = maxLife;
 	bullets = Player::maxAmmos;
 }
 
@@ -41,7 +52,7 @@ void	Player::disp(int tick) {	// Affiche le joueur
 		mvwaddch(game->getWin(), pos.y, pos.x - 1, '>' | COLOR_PAIR(tick%2 ? Color::Yellow : Color::Red));
 	else
 		mvwaddch(game->getWin(), pos.y, pos.x - 1, ' ');
-	mvwaddch(game->getWin(), pos.y, pos.x, '>' | COLOR_PAIR(Color::Blue) | A_BOLD);
+	mvwaddch(game->getWin(), pos.y, pos.x, '>' | COLOR_PAIR(color) | A_BOLD);
 }
 
 void 	Player::clear() {	// Supprime l'ancienne position du joueur

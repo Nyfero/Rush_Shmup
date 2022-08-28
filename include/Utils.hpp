@@ -3,20 +3,12 @@
 
 # include <stdint.h>
 
-/*
-uint8_t is guaranteed to be 8 bits
-uint_fast8_t is guaranteed to be >= 8 bits, much like an unsigned char
-*/
-typedef struct s_vec2ui {
-    uint_fast16_t x;
-    uint_fast16_t y;
-	bool	operator==(const struct s_vec2ui & rhs) const { return x == rhs.x && y == rhs.y; }
-} vec2ui;
 
 typedef struct s_vec2i {
     int_fast16_t x;
     int_fast16_t y;
 	bool	operator==(const struct s_vec2i & rhs) const { return x == rhs.x && y == rhs.y; }
+	s_vec2i	operator+(const struct s_vec2i & rhs) const { return {x + rhs.x, y + rhs.y}; }
 } vec2i;
 
 typedef struct s_vec2f {

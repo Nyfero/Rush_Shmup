@@ -19,7 +19,6 @@ Scorpius::~Scorpius() {}
 
 void	Scorpius::update() {
 	int	i = rand() % 3;
-	int	velocity;
 	
 	pos.x--;
 	if (i == 0)
@@ -43,4 +42,9 @@ void	Scorpius::clear() {
 
 vec2i	Scorpius::getPos() const {
 	return (pos);
+}
+
+vec2i	Scorpius::getVeloc()
+{
+	return {-1, velocity};
 }

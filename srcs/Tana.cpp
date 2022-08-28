@@ -25,6 +25,10 @@ void	Tana::update() {
 void	Tana::print() {
 	mvwaddch(game->getWin(), pos.y, pos.x, 'T' | COLOR_PAIR(Color::Red));
 }
+vec2i	Tana::getVeloc()
+{
+	return {-1, 0};
+}
 
 void	Tana::clear() {
 	mvwaddch(game->getWin(), pos.y, pos.x, ' ');

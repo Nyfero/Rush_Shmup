@@ -6,6 +6,7 @@
 #include "Hurricane.hpp"
 #include "Glaive.hpp"
 #include "Scorpius.hpp"
+#include "Bullet.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -15,21 +16,21 @@
 //	Constructors	//
 //					//
 
-// template< class Entites >
-// inline	void	CheckCollision(Entites entity)
-// {
-// 	for (size_t j = 0; j < entity.getData().size(); ++j)
-// 	{
-// 		if (b->getPos() == entity.getData().at(j).getPos())
-// 		{
-// 			entity.remove(j);
-// 			bullets.remove(i);
-// 			b = NULL;
-// 			scores += 10;
-// 			break;
-// 		}
-// 	}
-// }
+template< class Entites >
+bool	Game::CheckCollision(Entites & entity, Bullet* b, int score)
+{
+	for (size_t j = 0; j < entity.getData().size(); ++j)
+	{
+		if (b->getPos() + b->getVeloc() == entity.getData().at(j).getPos()
+		|| b->getPos() == entity.getData().at(j).getPos())
+		{
+			entity.remove(j);
+			scores += score;
+			return true;
+		}
+	}
+	return false;
+}
 
 int	Game::info_height = 4;
 
@@ -50,10 +51,10 @@ void Game::initColor()
 	init_pair(Color::CStar, Color::CLightGray, Color::CGray);
 	init_pair(Color::CStar2, Color::CLightGray2, Color::CGray);
 	init_pair(Color::Gray, COLOR_WHITE, Color::CGray);
+	init_pair(Color::Purple, COLOR_MAGENTA, Color::CGray);
 
-	init_pair(Color::HP_1, COLOR_GREEN, COLOR_GREEN);
-	init_pair(Color::HP_2, Color::COrange, Color::COrange);
-	init_pair(Color::HP_3, COLOR_RED, COLOR_RED);
+	init_pair(Color::CHP, COLOR_GREEN, COLOR_GREEN);
+	init_pair(Color::CBullet, Color::COrange, Color::COrange);
 	
 }
 
@@ -126,41 +127,20 @@ void	Game::drawHud( Player & player )
 	wmove(main_win, game_size.bottom() + 3, 1);
 	whline(main_win, '-', screen_size.width()- 2);
 
-	mvwaddstr(main_win, screen_size.height()- 3, 2, "Health: ");
+	mvwaddstr(main_win, screen_size.height()- 3, cursor, "Health: ");
+	cursor += 9;
 	for (int i = 0; i < player.getLife(); i++)
-	{
-		if (player.getLife() < MAX_HP/2)
-			wattron(main_win, COLOR_PAIR(Color::HP_2));
-		else if (player.getLife() < MAX_HP/3)
-			wattron(main_win, COLOR_PAIR(Color::HP_3));
-		else
-			wattron(main_win, COLOR_PAIR(Color::HP_1));
-		
-		mvwaddstr(main_win, screen_size.height() - 3, 10 + i+2, "  ");
+		mvwaddch(main_win, screen_size.height() - 3, cursor + (i*2), ' ' | COLOR_PAIR(Color::CHP));
 
-		if (i < MAX_HP/2)
-			wattroff(main_win, COLOR_PAIR(Color::HP_2));
-		else if (i <= MAX_HP/3)
-			wattroff(main_win, COLOR_PAIR(Color::HP_3));
-		else
-			wattroff(main_win, COLOR_PAIR(Color::HP_1));
-	}
-	cursor += 11 + MAX_HP*2;
-	std::string minute(std::to_string(tick/6000));
-	if (minute[0] == '0')
-		minute.clear();
-	else
-		minute.append("m");
-	mvwprintw(main_win, screen_size.height()-3, cursor, "Time: %s %lds", minute.c_str(), (tick/100)%60);
-
-	cursor += std::snprintf( nullptr, 0, "Time: %s %lds ", minute.c_str(), (tick/100)%60 ) + 2;
+	cursor += 3 + (Player::maxLife*2);
 	
 	mvwaddstr(main_win, screen_size.height()- 3, cursor, "Ammos: ");
 	cursor += 7;
 	for (int i = 0; i < player.getAmmo(); i++)
-		mvwaddch(main_win, screen_size.height() - 3, cursor + i*2, ' ' | COLOR_PAIR(Color::HP_2));
+		mvwaddch(main_win, screen_size.height() - 3, cursor + i*2, ' ' | COLOR_PAIR(Color::CBullet));
 	cursor += player.getAmmo()*2 + 2;
 
+	
 	std::string scoresStr(" Scores: ");
 	if (scores > 1000)
 	{
@@ -169,13 +149,22 @@ void	Game::drawHud( Player & player )
 	}
 	else
 		scoresStr += std::to_string(scores);
-	
 	cursor = screen_size.width()-(scoresStr.length()+3);
+	
 	mvwaddstr(main_win, screen_size.height()- 3, cursor, scoresStr.c_str());
+
+	std::string minute(std::to_string(tick/6000));
+	if (minute[0] == '0')
+		minute.clear();
+	else
+		minute.append("m");
+	cursor -= std::snprintf( nullptr, 0, "Time: %s %lds ", minute.c_str(), (tick/100)%60 ) + 2;
+	mvwprintw(main_win, screen_size.height()-3, cursor, "Time: %s %lds", minute.c_str(), (tick/100)%60);
+
 	wrefresh(main_win);
 }
 
-void	Game::run( void )
+void	Game::run( bool multiplayer )
 {
 	Space<Star> 		stars(this);
 	Space<Tana> 		tanas(this);
@@ -183,7 +172,11 @@ void	Game::run( void )
 	Space<Bullet>		bullets(this);
 	Space<Scorpius>		scorpius(this);
 	
+	if (multiplayer)
+		Player::maxLife = 6;
 	Player		player(this);
+	Player		player2(this);
+
 	Glaive		glaives(this);
 	
 	int	input;
@@ -213,6 +206,8 @@ void	Game::run( void )
 			scorpius.getData().at(i).clear();
 
 		player.clear();
+		if (multiplayer)
+			player2.clear();
 		glaives.clear();
 
 		/*	--------------------------------------------	*/
@@ -225,22 +220,47 @@ void	Game::run( void )
 			case 27: // Escape key
 				loop = false;
 				break;
+			
 			case KEY_LEFT:
+			if (multiplayer)
+			{
+				if (player2.getPos().x - 1 > 0)
+					player2.move(0);
+				break;
+			}
 			case 'a':
 				if (player.getPos().x - 1 > 0)
 					player.move(0);
 				break;
 			case KEY_RIGHT:
+			if (multiplayer)
+			{
+				if (player2.getPos().x + 1 < game_size.width())
+					player2.move(1);
+				break;
+			}
 			case 'd':
 				if (player.getPos().x + 1 < game_size.width())
 					player.move(1);
 				break;
 			case KEY_UP:
+			if (multiplayer)
+			{
+				if (player2.getPos().y > 0)
+					player2.move(2);
+				break;
+			}
 			case 'w':
 				if (player.getPos().y > 0)
 					player.move(2);
 				break;
 			case KEY_DOWN:
+			if (multiplayer)
+			{
+				if (player2.getPos().y <= game_size.height())
+					player2.move(3);
+				break;
+			}
 			case 's':
 				if (player.getPos().y <= game_size.height())
 					player.move(3);
@@ -249,6 +269,13 @@ void	Game::run( void )
 				if (player.shoot())
 					bullets.create(Source::SPlayer, {1, 0}, player.getPos());
 				break;
+			case '0':
+			if (multiplayer)
+			{
+				if (player.shoot())
+					bullets.create(Source::SPlayer, {1, 0}, player2.getPos());
+				break;
+			}
 			case KEY_RESIZE:
 				wresize(main_win, screen_size.height(), screen_size.width());
 				break;
@@ -258,10 +285,7 @@ void	Game::run( void )
 		
 		/*	UPDATE BULLET AND CHECK COLLISION	*/
 		
-		if (tick % 2 == 0)
-			bullets.update(Source::SPlayer);
-		if (tick % 3 == 0)
-			bullets.update(Source::SEnnemy);
+
 		
 		Bullet	*b = NULL;
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
@@ -272,46 +296,11 @@ void	Game::run( void )
 			//Check si balle player touche
 			if (b->getSource() == Source::SPlayer)
 			{
-				for (size_t j = 0; j < tanas.getData().size(); ++j)
-				{
-					if (b->getPos() == tanas.getData().at(j).getPos())
-					{
-						tanas.remove(j);
-						bullets.remove(i);
-						b = NULL;
-						scores += 10;
-						break;
-					}
-				}
-				if (b == NULL)
-					continue;
-				for (size_t j = 0; j < hurricanes.getData().size(); ++j)
-				{
-					if (b->getPos() == hurricanes.getData().at(j).getPos())
-					{
-						hurricanes.remove(j);
-						bullets.remove(i);
-						b = NULL;
-						scores += 15;
-						break;
-					}
-				}
-				if (b == NULL)
-					continue;
-				for (size_t j = 0; j < scorpius.getData().size(); ++j)
-				{
-					if (b->getPos() == scorpius.getData().at(j).getPos())
-					{
-						scorpius.remove(j);
-						bullets.remove(i);
-						b = NULL;
-						scores += 20;
-						break;
-					}
-				}
-				if (b == NULL)
-					continue;
-				if (b->getPos() == glaives.getPos())
+				if (CheckCollision<Space<Tana> >(tanas, b, 10)
+				|| CheckCollision<Space<Hurricane> >(hurricanes, b, 15)
+				|| CheckCollision<Space<Scorpius> >(scorpius, b, 30))
+					bullets.remove(i);
+				else if (b->getPos() == glaives.getPos())
 				{
 					glaives.hit();
 					if (glaives.getLife() <= 0)
@@ -322,44 +311,58 @@ void	Game::run( void )
 					bullets.remove(i);
 				}
 			}
-			//Check si balle ennemi touche
-			else if (b->getPos() == player.getPos())
-			{
-				player.update();
-				bullets.remove(i);
+			else {
+				//Check si balle ennemi touche
+				if (b->getPos() == player.getPos() ||
+						b->getPos() + b->getVeloc() == player.getPos())
+				{
+					player.update();
+					bullets.remove(i);
+				}
+				else if (b->getPos() == player2.getPos() ||
+						b->getPos() + b->getVeloc() == player2.getPos())
+				{
+					player.update();
+					bullets.remove(i);
+				}
 			}
 			b = NULL;
 		}
 		
+		if (tick % 2 == 0)
+			bullets.update(Source::SPlayer);
+		if (tick % 3 == 0)
+			bullets.update(Source::SEnnemy);
+
 		/*	--------------------------------------------	*/
 		
 		/*	UPDATE ALL ENTITY	*/
 
 		//	update player bullets
-		if (tick % 40 == 0)
+		if (tick % (multiplayer?20:40) == 0)
 			player.reload();
 		
 		//	update stars
 		if (boss == 0)
 		{
 			if (tick % 7 == 0)
-			stars.update(player);
+				stars.update(player, multiplayer? &player2 : NULL);
 			if (tick % 10 == 0)
-			stars.update(player);
+				stars.update(player, multiplayer? &player2 : NULL);
 			if (tick % 20 == 0)
 			stars.create();
 		}
 		
 		//	update tanas
 		if (tick % 5 == 0)
-			tanas.update(player);
+			tanas.update(player, multiplayer? &player2 : NULL);
 		if (tick > 250 && tick % 200 == 0 && boss == 0)
 			tanas.create();
 		
 		//	update hurricanes
 		if (tick % 10 == 0)
 		{
-			hurricanes.update(player);
+			hurricanes.update(player, multiplayer? &player2 : NULL);
 			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			{
 				if (tick % 50 == 0 && rand() % 2 == 0)
@@ -372,7 +375,7 @@ void	Game::run( void )
 		//	update scorpius
 		if (tick % 20 == 0 && boss == 1)
 		{
-			scorpius.update(player);
+			scorpius.update(player, multiplayer? &player2 : NULL);
 			for (size_t i = 0; i < scorpius.getData().size(); ++i)
 			{
 				if (tick % 150 == 0)
@@ -435,6 +438,8 @@ void	Game::run( void )
 				boss = 0;
 		}
 		player.disp(tick);
+		if (multiplayer)
+			player2.disp(tick);
 
 		/*	---------------------------------------------	*/
 		

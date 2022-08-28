@@ -9,10 +9,10 @@
 # include "Utils.hpp"
 # include "Player.hpp"
 # include "Color.hpp"
-
-# define MAX_HP 3
+# include "Bullet.hpp"
 
 class Player;
+class Bullet;
 
 class Game
 {
@@ -22,9 +22,13 @@ class Game
 		~Game();
 		
 		void	initColor( void );
-		void	run( void );
+		void	run( bool multiplayer );
 
 		void	drawHud( Player & player );
+
+		template< class Entites >
+		bool	CheckCollision( Entites & entity, Bullet* b, int score);
+
 
 		// void	checkCollision( void );
 		operator bool() const;

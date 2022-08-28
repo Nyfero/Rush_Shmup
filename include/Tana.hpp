@@ -16,6 +16,7 @@ class Tana: public IEntity
 		~Tana();
 		
 		//Functions
+		vec2i	getVeloc();
 		void	update();
 		void	print();
 		void	clear();

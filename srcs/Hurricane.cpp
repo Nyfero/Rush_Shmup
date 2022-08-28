@@ -46,3 +46,8 @@ void	Hurricane::clear() {
 vec2i	Hurricane::getPos() const {
 	return (pos);
 }
+
+vec2i	Hurricane::getVeloc()
+{
+	return {-1, velocity};
+}

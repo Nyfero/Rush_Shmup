@@ -4,7 +4,7 @@
 # include "IEntity.hpp"
 # include "Game.hpp"
 
-
+class Game;
 
 class Bullet: public IEntity
 {

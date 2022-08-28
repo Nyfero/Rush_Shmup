@@ -8,7 +8,7 @@ class Hurricane: public IEntity
 {
 	private:
 		vec2i	pos;
-		int		velocity;
+		int	velocity;
 		Game 	*game;
 
 	public:
@@ -19,6 +19,7 @@ class Hurricane: public IEntity
 		//Functions
 
 		int		yVelocity();
+		vec2i	getVeloc();
 		void	update();
 		void	print();
 		void	clear();
