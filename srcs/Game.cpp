@@ -16,26 +16,8 @@
 
 int	Game::info_height = 4;
 
-
-Game::Game() : _status(false)
+void Game::initColor()
 {
-	srand(time(NULL));
-	
-	main_win = initscr();
-	if (!main_win)
-		return ;
-	cbreak(); // Wait key not line ?
-	noecho(); // No print key on press
-	clear();
-	refresh();
-
-	curs_set(0); // Remove cursor
-	
-	if(!has_colors()) {
-		endwin();
-		printf("ERROR: Terminal does not support color.\n");
-		exit(1);
-	}
 	start_color();
 
 	init_color(Color::CLightGray, r(74), r(72), r(72));
@@ -56,6 +38,30 @@ Game::Game() : _status(false)
 	init_pair(Color::HP_2, Color::COrange, Color::COrange);
 	init_pair(Color::HP_3, COLOR_RED, COLOR_RED);
 	
+}
+
+Game::Game() : _status(false)
+{
+	srand(time(NULL));
+
+	main_win = initscr();
+	if (!main_win)
+		return ;
+	cbreak(); // Wait key not line ?
+	noecho(); // No print key on press
+	clear();
+	refresh();
+
+	curs_set(0); // Remove cursor
+
+	if(!has_colors()) {
+		endwin();
+		printf("ERROR: Terminal does not support color.\n");
+		exit(1);
+	}
+
+	initColor();
+
 	screen_size = {{0, 0}, {80, 24}};
 	game_size = {{0, 0}, {screen_size.width() - 2, screen_size.height() - info_height - 4}};
   
@@ -128,11 +134,7 @@ void	Game::drawHud( Player & player )
 	cursor += 7;
 	for (int i = 0; i < player.getAmmo(); i++)
 	{
-		// wattron(main_win, COLOR_PAIR(Color::HP_2));
-
 		mvwaddch(main_win, screen_size.height() - 3, cursor + i*2, ' ' | COLOR_PAIR(Color::HP_2));
-
-		// wattroff(main_win, COLOR_PAIR(Color::HP_2));
 	}
 
 
