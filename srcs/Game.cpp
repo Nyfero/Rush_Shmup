@@ -446,48 +446,6 @@ void	Game::run( void )
 	}
 }
 
-// void	Game::checkCollision() {
-// 	for (size_t i = 0; i < bullets.getData().size(); ++i)
-// 	{
-// 		Bullet	*b = &bullets.getData().at(i);
-// 
-// 		//Check si balle player touche
-// 		if (bullets.getData().at(i).getSource() == Source::SPlayer)
-// 		{
-// 			for (size_t j = 0; j < hurricanes.getData().size(); ++j)
-// 			{
-// 				if (bullets.getData().at(i).getPos() == hurricanes.getData().at(j).getPos())
-// 				{
-// 					hurricanes.getData().at(j).clear();
-// 					hurricanes.getData().erase(j);
-// 					bullets.getData().at(i).clear();
-// 					bullets.getData().erase(i);
-// 					b = NULL;
-// 				}
-// 			}
-// 			for (size_t j = 0; b != NULL && j < tanas.getData().size(); ++j)
-// 			{
-// 				if (bullets.getData().at(i).getPos() == tanas.getData().at(j).getPos())
-// 				{
-// 					tanas.getData().at(j).clear();
-// 					tanas.getData().erase(j);
-// 					bullets.getData().at(i).clear();
-// 					bullets.getData().erase(i);
-// 				}
-// 			}
-// 		}
-// 		//Check si balle ennemi touche
-// 		else if (bullets.getData().at(i).getPos() == player.getPos())
-// 		{
-// 			player.update();
-// 			bullets.getData().at(i).clear();
-// 			bullets.getData().erase(i);
-// 			if (player.getLife() == 0)
-// 				_loop = false;
-// 		}
-// 	}
-// }
-
 Game::operator bool() const {
 	return (_status);
 }
