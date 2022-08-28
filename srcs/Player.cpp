@@ -8,7 +8,7 @@ Player::Player(Game *gameptr) { //Initialise le joueur
 	game = gameptr;
 	pos.x = game->getWidth() / 4;	// Place le joueur au centre de la carte
 	pos.y = game->getHeight() / 2;
-	life = 3;
+	life = 100;
 	bullets = 10;
 }
 
@@ -59,8 +59,10 @@ int		Player::shoot() { //Renvoie 1 s'il y a 1 balle, sinon renvoie 0
 	}
 	return (0);
 }
+#include <iostream>
 
 int		Player::getLife() const {
+	std::cerr << life << "\n";
 	return (life);
 }
 
