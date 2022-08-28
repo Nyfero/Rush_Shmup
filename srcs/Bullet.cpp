@@ -4,11 +4,12 @@
 //	Constructors	//
 //					//
 
-Bullet::Bullet(Game * gameptr, Source source, float velocity, int_fast16_t x, int_fast16_t y): _game(gameptr) {
+Bullet::Bullet(Game * gameptr, Source source, vec2i velocity, vec2i pos): _game(gameptr) {
 	_source = source;
-	_velocity = velocity;
-	_pos.x = x;
-	_pos.y = y;
+	_velocity.x = velocity.x;
+	_velocity.y = velocity.y;
+	_pos.x = pos.x;
+	_pos.y = pos.y;
 }
 
 Bullet::~Bullet() {}
@@ -18,7 +19,8 @@ Bullet::~Bullet() {}
 //				//
 
 void	Bullet::update() {
-	_pos.x += _velocity;
+	_pos.x += _velocity.x;
+	_pos.y += _velocity.y;
 }
 
 vec2i	Bullet::getPos() const {
@@ -26,7 +28,7 @@ vec2i	Bullet::getPos() const {
 }
 
 
-float	Bullet::getVeloc() const {
+vec2i	Bullet::getVeloc() const {
 	return (_velocity);
 }
 
