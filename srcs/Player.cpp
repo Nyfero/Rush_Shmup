@@ -75,4 +75,9 @@ void	Player::update() {
 	life--;
 }
 
+void	Player::heal() {
+	if (life < 3)
+		life++;
+}
+
 void	Player::print() {}

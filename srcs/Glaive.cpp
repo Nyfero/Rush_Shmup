@@ -25,6 +25,12 @@ Glaive::~Glaive() {}
 //				//
 
 void	Glaive::print() {
+	Color	bossLife = Color::Green;
+	
+	if (life < 14 && life > 7)
+		bossLife = Color::Orange;
+	else if (life <= 7)
+		bossLife = Color::Red;
 	mvwaddch(game->getWin(), pos.y - 3, pos.x - 3, '<' | COLOR_PAIR(Color::Yellow) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y - 3, pos.x - 2, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y - 3, pos.x - 1, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);
@@ -34,7 +40,7 @@ void	Glaive::print() {
 	mvwaddch(game->getWin(), pos.y - 1, pos.x + 1, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y - 1, pos.x, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y, pos.x - 1, '(' | COLOR_PAIR(Color::Blue) | A_BOLD);
-	mvwaddch(game->getWin(), pos.y, pos.x, 'X' | COLOR_PAIR(Color::Red) | A_BOLD);
+	mvwaddch(game->getWin(), pos.y, pos.x, 'X' | COLOR_PAIR(bossLife) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y, pos.x + 2, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y, pos.x + 3, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);
 	mvwaddch(game->getWin(), pos.y, pos.x + 4, '&' | COLOR_PAIR(Color::Blue) | A_BOLD);

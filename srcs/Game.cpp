@@ -50,6 +50,7 @@ void Game::initColor()
 	init_pair(Color::CStar, Color::CLightGray, Color::CGray);
 	init_pair(Color::CStar2, Color::CLightGray2, Color::CGray);
 	init_pair(Color::Gray, COLOR_WHITE, Color::CGray);
+	init_pair(Color::Orange, Color::COrange, Color::CGray);
 
 	init_pair(Color::HP_1, COLOR_GREEN, COLOR_GREEN);
 	init_pair(Color::HP_2, Color::COrange, Color::COrange);
@@ -353,8 +354,22 @@ void	Game::run( void )
 		//	update tanas
 		if (tick % 5 == 0)
 			tanas.update(player);
-		if (tick > 250 && tick % 200 == 0 && boss == 0)
+		if (tick > 500 && tick % 200 == 0 && boss == 0)
 			tanas.create();
+		if (tick > 1 && tick % 3000 == 0 && boss == 0)
+		{
+			tanas.create();
+			tanas.create();
+			tanas.create();
+			tanas.create();
+			tanas.create();
+		}
+		if (tick > 1 && tick % 12000 == 0 && boss == 0)
+		{
+			tanas.create();
+			tanas.create();
+			tanas.create();
+		}
 		
 		//	update hurricanes
 		if (tick % 10 == 0)
@@ -366,8 +381,14 @@ void	Game::run( void )
 				bullets.create(Source::SEnnemy, {-1, 0} , hurricanes.getData().at(i).getPos());
 			}
 		}
-		if (tick > 1 && tick % 500 == 0 && boss == 0)
+		if (tick > 1500 && tick % 500 == 0 && boss == 0)
 			hurricanes.create();
+		if (tick > 1 && tick % 6000 == 0 && boss == 0)
+		{
+			hurricanes.create();
+			hurricanes.create();
+			hurricanes.create();
+		}
 		
 		//	update scorpius
 		if (tick % 20 == 0 && boss == 1)
@@ -375,7 +396,7 @@ void	Game::run( void )
 			scorpius.update(player);
 			for (size_t i = 0; i < scorpius.getData().size(); ++i)
 			{
-				if (tick % 150 == 0)
+				if (tick % 125 == 0)
 				{
 					bullets.create(Source::SEnnemy, {-1, 1} , scorpius.getData().at(i).getPos());
 					bullets.create(Source::SEnnemy, {-1, -1} , scorpius.getData().at(i).getPos());
@@ -387,8 +408,10 @@ void	Game::run( void )
 			}
 		}
 		if (boss == 1)
-			if (tick % 400 == 0)
-				scorpius.create();
+			if (tick % 300 == 0)
+				scorpius.create();	
+		if (glaives.getLife() < 0 && tick % 500 == 0)
+			scorpius.create();
 
 		//	update glaives
 		if (boss == 1 && tick % 50 == 0)
@@ -399,7 +422,7 @@ void	Game::run( void )
 				bullets.create(Source::SEnnemy, {-1, 0} , glaives.getUpWeapon());
 				bullets.create(Source::SEnnemy, {-1, 0} , glaives.getDownWeapon());
 			}
-			if (tick % 500 == 0)
+			if (tick % 300 == 0)
 			{
 				bullets.create(Source::SEnnemy, {-1, 1} , glaives.getUpWeapon());
 				bullets.create(Source::SEnnemy, {-1, 1} , glaives.getDownWeapon());
@@ -410,7 +433,7 @@ void	Game::run( void )
 				bullets.create(Source::SEnnemy, {-1, -1} , glaives.getPos());
 			}
 		}
-		if (tick > 1 && tick % 1000 == 0)
+		if (tick > 1 && tick % 15000 == 0)
 			boss = 1;
 				
 		/*	PRINT ALL ENTITY	*/
@@ -432,7 +455,10 @@ void	Game::run( void )
 			if (glaives.getLife() > 0)
 				glaives.print();
 			else
+			{
 				boss = 0;
+				player.heal();
+			}
 		}
 		player.disp(tick);
 
