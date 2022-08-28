@@ -215,17 +215,13 @@ void	Game::run( void )
 		if (tick % 10 == 0)
 		{
 			hurricanes.update(player);
-			Hurricane * current;
 			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			{
-				current = &hurricanes.getData().at(i);
-				if (current == NULL)
-					continue;
 				if (tick % 50 == 0 && rand() % 2 == 0)
-					bullets.create(Source::SEnnemy, -1.0f, current->getPos().x, current->getPos().y);
+					bullets.create(Source::SEnnemy, -1.0f, hurricanes.getData().at(i).getPos().x, hurricanes.getData().at(i).getPos().y);
 			}
 		}
-		if (tick > 500 && tick % 50 == 0)
+		if (tick > 500 && tick % 1000 == 0)
 			hurricanes.create();
 
 		if (tick % 7 == 0)
