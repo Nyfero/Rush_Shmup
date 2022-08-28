@@ -109,6 +109,7 @@ void	Game::drawHud( Player & player )
 	wattroff(main_win, A_BOLD);
 	wmove(main_win, game_size.bottom() + 3, 1);
 	whline(main_win, '-', screen_size.width()- 2);
+
 	mvwaddstr(main_win, screen_size.height()- 3, 2, "Health: ");
 	for (int i = 0; i < player.getLife(); i++)
 	{
@@ -173,10 +174,11 @@ void	Game::run( void )
 	loop = true;
 	int boss = 0;
 
+	tick = 0;
+	scores = 0;
 	drawHud(player);
 	wrefresh(game_win);
 	
-	tick = 0;
 	while(player.getLife() > 0 && loop == true)
 	{
 		input = tolower(wgetch(main_win));
@@ -420,7 +422,7 @@ void	Game::run( void )
 		wrefresh(game_win);
 
 		++tick;
-		usleep(10000); // 10ms
+		usleep(9500);
 	}
 }
 
