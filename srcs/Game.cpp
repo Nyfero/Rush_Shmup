@@ -119,6 +119,7 @@ void	Game::run( void )
 		{
 			case 'q':
 			case 27: // Escape key
+				std::cerr << tanas.getData().capacity();
 				loop = false;
 				break;
 			case KEY_LEFT:
@@ -162,41 +163,46 @@ void	Game::run( void )
 		if (tick % 4 == 0)
 			bullets.update();
 
+		Bullet	*b = NULL;
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
-		{	
+		{
+			b = &bullets.getData().at(i);
+			if (b == NULL)
+				continue;
 			//Check si balle player touche
-			if (bullets.getData().at(i).getSource() == Source::SPlayer)
+			if (b->getSource() == Source::SPlayer)
 			{
 				for (size_t j = 0; j < hurricanes.getData().size(); ++j)
 				{
-					if (bullets.getData().at(i).getPos() == hurricanes.getData().at(j).getPos())
+					if (b->getPos() == hurricanes.getData().at(j).getPos())
 					{
-						hurricanes.getData().at(j).clear();
-						hurricanes.getData().erase(hurricanes.getData().begin() + j);
-						bullets.getData().at(i).clear();
-						bullets.getData().erase(bullets.getData().begin() + i);
+						hurricanes.remove(j);
+						bullets.remove(i);
+						b = NULL;
+						break;
 					}
 				}
+				if (b == NULL)
+					continue;
 				for (size_t j = 0; j < tanas.getData().size(); ++j)
 				{
-					if (bullets.getData().at(i).getPos() == tanas.getData().at(j).getPos())
+					if (b->getPos() == tanas.getData().at(j).getPos())
 					{
-						tanas.getData().at(j).clear();
-						tanas.getData().erase(tanas.getData().begin() + j);
-						bullets.getData().at(i).clear();
-						bullets.getData().erase(bullets.getData().begin() + i);
+						tanas.remove(j);
+						bullets.remove(i);
+						break;
 					}
 				}
 			}
 			//Check si balle ennemi touche
-			else if (bullets.getData().at(i).getPos() == player.getPos())
+			else if (b->getPos() == player.getPos())
 			{
 				player.update();
-				bullets.getData().at(i).clear();
-				bullets.getData().erase(bullets.getData().begin() + i);
+				bullets.remove(i);
 				if (player.getLife() <= 0)
 					loop = false;
 			}
+			b = NULL;
 		}
 			
 		if (tick % 5 == 0)
@@ -206,13 +212,15 @@ void	Game::run( void )
 		if (tick > 250 && tick % 200 == 0)
 			tanas.create();
 
-		if (tick % 50 == 0)
+		if (tick % 10 == 0)
 		{
 			hurricanes.update(player);
 			Hurricane * current;
 			for (size_t i = 0; i < hurricanes.getData().size(); ++i)
 			{
 				current = &hurricanes.getData().at(i);
+				if (current == NULL)
+					continue;
 				if (tick % 50 == 0 && rand() % 2 == 0)
 					bullets.create(Source::SEnnemy, -1.0f, current->getPos().x, current->getPos().y);
 			}
