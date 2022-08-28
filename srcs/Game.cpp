@@ -119,6 +119,7 @@ void	Game::run( void )
 		{
 			case 'q':
 			case 27: // Escape key
+				std::cerr << tanas.getData().capacity();
 				loop = false;
 				break;
 			case KEY_LEFT:
@@ -162,11 +163,12 @@ void	Game::run( void )
 		if (tick % 4 == 0)
 			bullets.update();
 
-		Bullet	*b;
+		Bullet	*b = NULL;
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 		{
 			b = &bullets.getData().at(i);
-			
+			if (b == NULL)
+				continue;
 			//Check si balle player touche
 			if (b->getSource() == Source::SPlayer)
 			{
@@ -174,21 +176,20 @@ void	Game::run( void )
 				{
 					if (b->getPos() == hurricanes.getData().at(j).getPos())
 					{
-						hurricanes.getData().at(j).clear();
-						hurricanes.getData().erase(hurricanes.getData().begin() + j);
-						b->clear();
-						bullets.getData().erase(bullets.getData().begin() + i);
+						hurricanes.remove(j);
+						bullets.remove(i);
 						b = NULL;
+						break;
 					}
 				}
-				for (size_t j = 0; b != NULL && j < tanas.getData().size(); ++j)
+				if (b == NULL)
+					continue;
+				for (size_t j = 0; j < tanas.getData().size(); ++j)
 				{
 					if (b->getPos() == tanas.getData().at(j).getPos())
 					{
-						tanas.getData().at(j).clear();
-						tanas.getData().erase(tanas.getData().begin() + j);
-						b->clear();
-						bullets.getData().erase(bullets.getData().begin() + i);
+						tanas.remove(j);
+						break;
 					}
 				}
 			}
@@ -201,6 +202,7 @@ void	Game::run( void )
 				if (player.getLife() == 0)
 					loop = false;
 			}
+			b = NULL;
 		}
 			
 		if (tick % 5 == 0)
@@ -210,7 +212,7 @@ void	Game::run( void )
 		if (tick > 250 && tick % 50 == 0)
 			tanas.create();
 
-		if (tick % 5 == 0)
+		if (tick % 10 == 0)
 		{
 			hurricanes.update(player);
 			Hurricane * current;

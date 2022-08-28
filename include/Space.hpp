@@ -40,6 +40,11 @@ class Space
 			lst.push_back(entity);
 		};
 		
+		void	remove(size_t index) {
+			lst.at(index).clear();
+			lst.erase(lst.begin() + index);
+		};
+
 		std::vector<T> getData() const { return lst; };
 };
 
@@ -69,8 +74,14 @@ class Space<Bullet>
 			Bullet entity(game, source, velocity, x, y);
 			lst.push_back(entity);
 		};
-		
-		std::vector<Bullet> getData() const { return lst; };
+
+		void	remove(size_t index) {
+			lst.at(index).clear();
+			lst.erase(lst.begin() + index);
+		};
+
+
+		std::vector<Bullet> & getData() { return lst; };
 };
 
 #endif
