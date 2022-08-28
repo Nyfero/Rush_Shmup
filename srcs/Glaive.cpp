@@ -121,6 +121,6 @@ void	Glaive::hit() {
 	life--;
 }
 
-// void	Glaive::attack() {
-// 
-// }
+void	Glaive::heal() {
+	life = 20;
+}

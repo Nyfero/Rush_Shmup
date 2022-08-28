@@ -434,7 +434,11 @@ void	Game::run( void )
 			}
 		}
 		if (tick > 1 && tick % 15000 == 0)
+		{
 			boss = 1;
+			if (glaives.getLife() <= 0)
+				glaives.heal();
+		}
 				
 		/*	PRINT ALL ENTITY	*/
 

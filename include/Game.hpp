@@ -10,7 +10,7 @@
 # include "Player.hpp"
 # include "Color.hpp"
 
-# define MAX_HP 3
+# define MAX_HP 10
 
 class Player;
 
