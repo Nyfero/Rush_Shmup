@@ -150,7 +150,7 @@ void	Game::drawHud( Player & player )
 	}
 	else
 		scoresStr += std::to_string(scores);
-	cursor = screen_size.width()-(scoresStr.length()+3);
+	cursor = screen_size.width()-(scoresStr.length());
 	
 	mvwaddstr(main_win, screen_size.height()- 3, cursor, scoresStr.c_str());
 
@@ -159,7 +159,7 @@ void	Game::drawHud( Player & player )
 		minute.clear();
 	else
 		minute.append("m");
-	cursor -= std::snprintf( nullptr, 0, "Time: %s %lds ", minute.c_str(), (tick/100)%60 ) + 2;
+	cursor -= std::snprintf( nullptr, 0, "Time: %s %lds ", minute.c_str(), (tick/100)%60 ) + 1;
 	mvwprintw(main_win, screen_size.height()-3, cursor, "Time: %s %lds", minute.c_str(), (tick/100)%60);
 
 	wrefresh(main_win);
