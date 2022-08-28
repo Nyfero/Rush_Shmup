@@ -24,8 +24,8 @@ class Space
 		void	update(Player & player, Player * player2) {
 			for (size_t i = 0; i < lst.size(); i++) {
 				if (!std::is_same<T, Star>::value && (
-				(player.getPos() == lst.at(i).getPos()) ||
-				(player2 != NULL && player2->getPos() == lst.at(i).getPos())))
+				(player.getPos() == lst.at(i).getPos() || player.getPos() == lst.at(i).getPos() + lst.at(i).getVeloc()) ||
+				(player2 != NULL && (player2->getPos() == lst.at(i).getPos() || player2->getPos() == lst.at(i).getPos()+lst.at(i).getVeloc()))))
 				{
 					player.update();
 					lst.erase(lst.begin() + i);

@@ -19,6 +19,7 @@ class Star: public IEntity
 		
 		//Functions
 		vec2i	getPos() const;
+		vec2i	getVeloc();
 		void	update();
 		void	print();
 		void	clear();

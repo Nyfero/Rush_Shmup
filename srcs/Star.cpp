@@ -25,6 +25,10 @@ vec2i	Star::getPos() const {
 	return (pos);
 }
 
+vec2i	Star::getVeloc() {
+	return {0, 0};
+}
+
 void 	Star::print() {
 	mvwaddch(game->getWin(), pos.y, pos.x, '.' | COLOR_PAIR(color));
 }
