@@ -20,6 +20,8 @@ class Bullet: public IEntity
 		
 		//Functions
 		vec2i	getPos() const;
+		float	getVeloc() const;
+		Source	getSource() const;
 		void	update();
 		void	print();
 		void	clear();

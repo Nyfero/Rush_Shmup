@@ -25,6 +25,15 @@ vec2i	Bullet::getPos() const {
 	return (_pos);
 }
 
+
+float	Bullet::getVeloc() const {
+	return (_velocity);
+}
+
+Source	Bullet::getSource() const {
+	return (_source);
+}
+
 void 	Bullet::print() {
 	mvwaddch(_game->getWin(), _pos.y, _pos.x, '-' | COLOR_PAIR(Color::Yellow) | A_BOLD);
 }
