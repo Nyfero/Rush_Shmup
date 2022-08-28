@@ -24,7 +24,7 @@ Game::Game() : _status(false)
 	
 	main_win = initscr();
 	if (!main_win)
-	return ;
+		return ;
 	cbreak(); // Wait key not line ?
 	noecho(); // No print key on press
 	clear();
@@ -64,6 +64,7 @@ Game::Game() : _status(false)
 	
 	nodelay(main_win, true);
 	nodelay(game_win, true);
+	wbkgd(stdscr, COLOR_PAIR(Color::Gray));
 	wbkgd(main_win, COLOR_PAIR(Color::Gray));
 	wbkgd(game_win, COLOR_PAIR(Color::Gray));
 	refresh();
@@ -97,6 +98,14 @@ void	Game::drawHud( Player & player )
 		mvwaddstr(main_win, screen_size.height() - 3, 10 + i+2, "  ");
 		wattroff(main_win, COLOR_PAIR(Color::HP_1)); 
 	}
+	
+	std::string minute(std::to_string(tick/6000));
+	if (minute[0] == '0')
+		minute.clear();
+	else
+		minute.append("m");
+
+	mvwprintw(main_win, screen_size.height()-3, 14+ MAX_HP*2, "Time: %s %ds", minute.c_str(), (tick/100)%60);
 	wrefresh(main_win);
 }
 
