@@ -95,8 +95,26 @@ int		Glaive::getLife() const {
 	return (life);
 }
 
-#include <iostream>
-void 	Glaive::hit() {
-	std::cerr << life << "\n";
+vec2i	Glaive::getUpWeapon() const {
+	vec2i	tmp;
+	
+	tmp.x = pos.x - 4;
+	tmp.y = pos.y - 3;
+	return (tmp);
+}
+
+vec2i	Glaive::getDownWeapon() const {
+	vec2i	tmp;
+	
+	tmp.x = pos.x - 4;
+	tmp.y = pos.y + 3;
+	return (tmp);
+}
+
+void	Glaive::hit() {
 	life--;
 }
+
+// void	Glaive::attack() {
+// 
+// }
