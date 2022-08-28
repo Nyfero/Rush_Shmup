@@ -28,7 +28,7 @@ class Space
 					player.update();
 					lst.erase(lst.begin() + i);
 				}
-				else if (lst.at(i).getPos().y > game->getHeight() || lst.at(i).getPos().y <= 0 || lst.at(i).getPos().x <= 0 )
+				else if (lst.at(i).getPos().y > game->getHeight() + 1 || lst.at(i).getPos().y < 0 || lst.at(i).getPos().x <= 0 )
 					lst.erase(lst.begin() + i);
 				else
 					lst.at(i).update();

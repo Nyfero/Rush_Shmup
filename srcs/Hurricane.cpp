@@ -8,7 +8,7 @@
 Hurricane::Hurricane(Game *gameptr) {
 	game = gameptr;
 	pos.x = game->getWidth();
-	pos.y = rand() % game->getHeight() + 1;
+	pos.y = rand() % (game->getHeight() + 2);
 	velocity = yVelocity();
 }
 
@@ -30,7 +30,7 @@ int	Hurricane::yVelocity() {
 
 void	Hurricane::update() {
 	pos.x--;
-	if (pos.y + velocity <= 0 || pos.y + velocity > game->getHeight())
+	if (pos.y + velocity < 0 || pos.y + velocity > game->getHeight() + 1)
 		velocity *= -1;
 	pos.y += velocity;
 }
