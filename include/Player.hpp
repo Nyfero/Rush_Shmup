@@ -30,6 +30,7 @@ class Player: public IEntity
 		vec2i	getPos() const;
 		int		getLife() const;
 		int		getAmmo() const;
+		void	heal();
 		void	update();
 		void	move(int dir);
 		void	print();
