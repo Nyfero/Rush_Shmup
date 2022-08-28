@@ -209,7 +209,7 @@ void	Game::run( void )
 		{
 			tanas.update(player);
 		}
-		if (tick > 250 && tick % 50 == 0)
+		if (tick > 250 && tick % 200 == 0)
 			tanas.create();
 
 		if (tick % 10 == 0)
