@@ -242,8 +242,10 @@ void	Game::run( void )
 		
 		/*	UPDATE BULLET AND CHECK COLLISION	*/
 		
-		if (tick % 4 == 0)
-			bullets.update();
+		if (tick % 2 == 0)
+			bullets.update(Source::SPlayer);
+		if (tick % 3 == 0)
+			bullets.update(Source::SEnnemy);
 		
 		Bullet	*b = NULL;
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
@@ -297,9 +299,11 @@ void	Game::run( void )
 				{
 					glaives.hit();
 					if (glaives.getLife() <= 0)
+					{
+						scores += 1000;
 						glaives.clear();
+					}
 					bullets.remove(i);
-					scores += 1000;
 				}
 			}
 			//Check si balle ennemi touche

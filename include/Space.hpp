@@ -61,11 +61,11 @@ class Space<Bullet>
 		~Space() {};
 		
 		//Functions
-		void	update() {
+		void	update(Source source) {
 			for (size_t i = 0; i < lst.size(); i++) {
 				if (lst.at(i).getPos().x > game->getWidth() || lst.at(i).getPos().x < 0 )
 					lst.erase(lst.begin() + i);
-				else
+				else if (lst.at(i).getSource() == source)
 					lst.at(i).update();
 			}
 		};
