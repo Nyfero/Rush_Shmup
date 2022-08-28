@@ -15,6 +15,22 @@
 //	Constructors	//
 //					//
 
+// template< class Entites >
+// inline	void	CheckCollision(Entites entity)
+// {
+// 	for (size_t j = 0; j < entity.getData().size(); ++j)
+// 	{
+// 		if (b->getPos() == entity.getData().at(j).getPos())
+// 		{
+// 			entity.remove(j);
+// 			bullets.remove(i);
+// 			b = NULL;
+// 			scores += 10;
+// 			break;
+// 		}
+// 	}
+// }
+
 int	Game::info_height = 4;
 
 void Game::initColor()
