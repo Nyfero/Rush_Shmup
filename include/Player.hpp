@@ -13,12 +13,14 @@ class Player: public IEntity
 		int		life;
 		int		bullets;
 		Game	*game;
+		
+		static int maxAmmos;
 
 	public:
 		//Constructors
 		Player(Game *gameptr);
 		~Player();
-		
+
 		//Functions
 		vec2i	getPos() const;
 		int		getLife() const;

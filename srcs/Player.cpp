@@ -4,12 +4,15 @@
 //	Constructors	//
 //					//
 
+int	Player::maxAmmos = 10;
+
+
 Player::Player(Game *gameptr) { //Initialise le joueur
 	game = gameptr;
 	pos.x = game->getWidth() / 4;	// Place le joueur au centre de la carte
 	pos.y = game->getHeight() / 2;
 	life = MAX_HP;
-	bullets = 10;
+	bullets = Player::maxAmmos;
 }
 
 Player::~Player() {}
@@ -47,7 +50,7 @@ void 	Player::clear() {	// Supprime l'ancienne position du joueur
 }
 
 void	Player::reload() {	// Recharge 1 balle s'il y en a moins de 10
-	if (bullets < 10)
+	if (bullets < Player::maxAmmos)
 		bullets++;
 }
 

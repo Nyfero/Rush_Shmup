@@ -87,6 +87,13 @@ Game::~Game() {
 	delwin(main_win);
 	delwin(game_win);
 	endwin();
+	std::cout << "\n\
+	\e[44;37m███████ ██ ███    ██ ██ ███████ ██   ██     ██\e[0m\n\
+	\e[44;37m██      ██ ████   ██ ██ ██      ██   ██     ██\e[0m\n\
+	\e[44;37m█████   ██ ██ ██  ██ ██ ███████ ███████     ██\e[0m\n\
+	\e[44;37m██      ██ ██  ██ ██ ██      ██ ██   ██       \e[0m\n\
+	\e[44;37m██      ██ ██   ████ ██ ███████ ██   ██     ██\e[0m\n\
+\n\nYou have a scores of " << scores << "\nIn " << tick/6000 <<"m " << (tick/100)%60 << "s\n";
 }
 
 //				//
@@ -95,7 +102,7 @@ Game::~Game() {
 
 void	Game::drawHud( Player & player )
 {
-	int cursor = 2;
+	unsigned long cursor = 2;
 	werase(main_win);
 	wattron(main_win, A_BOLD);
 	box(main_win, 0, 0);
@@ -134,11 +141,20 @@ void	Game::drawHud( Player & player )
 	mvwaddstr(main_win, screen_size.height()- 3, cursor, "Ammos: ");
 	cursor += 7;
 	for (int i = 0; i < player.getAmmo(); i++)
-	{
 		mvwaddch(main_win, screen_size.height() - 3, cursor + i*2, ' ' | COLOR_PAIR(Color::HP_2));
+	cursor += player.getAmmo()*2 + 2;
+
+	std::string scoresStr(" Scores: ");
+	if (scores > 1000)
+	{
+		scoresStr += std::to_string(scores/1000);
+		scoresStr += "K";
 	}
-
-
+	else
+		scoresStr += std::to_string(scores);
+	
+	cursor = screen_size.width()-(scoresStr.length()+3);
+	mvwaddstr(main_win, screen_size.height()- 3, cursor, scoresStr.c_str());
 	wrefresh(main_win);
 }
 
@@ -232,18 +248,6 @@ void	Game::run( void )
 			//Check si balle player touche
 			if (b->getSource() == Source::SPlayer)
 			{
-				for (size_t j = 0; j < hurricanes.getData().size(); ++j)
-				{
-					if (b->getPos() == hurricanes.getData().at(j).getPos())
-					{
-						hurricanes.remove(j);
-						bullets.remove(i);
-						b = NULL;
-						break;
-					}
-				}
-				if (b == NULL)
-					continue;
 				for (size_t j = 0; j < tanas.getData().size(); ++j)
 				{
 					if (b->getPos() == tanas.getData().at(j).getPos())
@@ -251,6 +255,20 @@ void	Game::run( void )
 						tanas.remove(j);
 						bullets.remove(i);
 						b = NULL;
+						scores += 10;
+						break;
+					}
+				}
+				if (b == NULL)
+					continue;
+				for (size_t j = 0; j < hurricanes.getData().size(); ++j)
+				{
+					if (b->getPos() == hurricanes.getData().at(j).getPos())
+					{
+						hurricanes.remove(j);
+						bullets.remove(i);
+						b = NULL;
+						scores += 15;
 						break;
 					}
 				}
@@ -263,6 +281,7 @@ void	Game::run( void )
 						scorpius.remove(j);
 						bullets.remove(i);
 						b = NULL;
+						scores += 20;
 						break;
 					}
 				}
@@ -274,8 +293,7 @@ void	Game::run( void )
 					if (glaives.getLife() <= 0)
 						glaives.clear();
 					bullets.remove(i);
-					break;
-				
+					scores += 1000;
 				}
 			}
 			//Check si balle ennemi touche

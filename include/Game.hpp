@@ -45,6 +45,7 @@ class Game
 		static int info_height;
 		bool		loop;
 		bool		_status;
+		int			scores;
 };
 
 #endif
