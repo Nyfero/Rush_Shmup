@@ -9,7 +9,6 @@ Tana::Tana(Game *gameptr) { //Initialise un Tana qui avance en ligne droite
 	game = gameptr;
 	pos.x = game->getWidth();
 	pos.y = rand() % game->getHeight() + 1;
-	speed = Velocity(); 
 }
 
 Tana::~Tana() {}
@@ -18,20 +17,9 @@ Tana::~Tana() {}
 //	Functions	//
 //				//
 
-float	Tana::Velocity() {
-	srand(time(NULL));
-	int		i = rand() % 100;
-	float	x;
-
-	if (i < 25) //Rapide
-		x = -2;
-	else //Normal
-		x = -1;
-	return (x);
-}
 
 void	Tana::update() {
-	pos.x += speed;
+	pos.x--;
 }
 
 void	Tana::print() {

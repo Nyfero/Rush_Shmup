@@ -8,7 +8,6 @@ class Tana: public IEntity
 {
 	private:
 		vec2i	pos;
-		float	speed;
 		Game 	*game;
 	
 	public:
@@ -17,7 +16,6 @@ class Tana: public IEntity
 		~Tana();
 		
 		//Functions
-		float	Velocity();
 		void	update();
 		void	print();
 		void	clear();

@@ -3,6 +3,7 @@
 #include "Space.hpp"
 #include "Player.hpp"
 #include "Tana.hpp"
+#include "Hurricane.hpp"
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -82,6 +83,7 @@ void	Game::run( void )
 {
 	Space<Star> stars(this);
 	Space<Tana> tanas(this);
+	Space<Hurricane>	hurricanes(this);
 	Space<Bullet> bullets(this);
 	
 	Player		player(this);
@@ -106,6 +108,8 @@ void	Game::run( void )
 			tanas.getData().at(i).clear();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).clear();
+		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
+			hurricanes.getData().at(i).clear();
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).clear();
 
@@ -163,6 +167,13 @@ void	Game::run( void )
 		if (tick > 250 && tick % 50 == 0)
 			tanas.create();
 
+		if (tick % 5 == 0)
+			hurricanes.update();
+		if (tick > 250 && tick % 30 == 0)
+			hurricanes.create();
+
+		if (tick % 7 == 0)
+			stars.update();
 		if (tick % 10 == 0)
 			stars.update();
 		if (tick % 20 == 0)
@@ -170,6 +181,8 @@ void	Game::run( void )
 
 		for (size_t i = 0; i < bullets.getData().size(); ++i)
 			bullets.getData().at(i).print();
+		for (size_t i = 0; i < hurricanes.getData().size(); ++i)
+			hurricanes.getData().at(i).print();
 		for (size_t i = 0; i < stars.getData().size(); ++i)
 			stars.getData().at(i).print();
 		for (size_t i = 0; i < tanas.getData().size(); ++i)
