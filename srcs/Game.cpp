@@ -176,7 +176,7 @@ void	Game::run( bool multiplayer )
 	if (multiplayer)
 		Player::maxLife = 6;
 	Player		player(this);
-	Player		player2(this);
+	Player		player2(this, Color::Purple);
 
 	Glaive		glaives(this);
 	
